@@ -22,6 +22,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -57,6 +58,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Villa Aurora Resort Colors
+        resort: {
+          coral: "hsl(var(--resort-coral))",
+          sage: "hsl(var(--resort-sage))",
+          sunset: "hsl(var(--resort-sunset))",
+          sky: "hsl(var(--resort-sky))",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
