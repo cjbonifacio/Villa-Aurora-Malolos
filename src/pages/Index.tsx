@@ -1,8 +1,10 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Packages from "@/components/Packages";
-import Amenities from "@/components/Amenities";
-import Contact from "@/components/Contact";
+import EnhancedAmenities from "@/components/EnhancedAmenities";
+import Weddings from "@/components/Weddings";
+import Gallery from "@/components/Gallery";
+import EnhancedContact from "@/components/EnhancedContact";
 
 const Index = () => {
   return (
@@ -10,8 +12,10 @@ const Index = () => {
       <Navigation />
       <Hero />
       <Packages />
-      <Amenities />
-      <Contact />
+      <EnhancedAmenities />
+      <Weddings />
+      <Gallery />
+      <EnhancedContact />
       
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-8">
