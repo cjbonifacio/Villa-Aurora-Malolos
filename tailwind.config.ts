@@ -15,6 +15,20 @@ export default {
     extend: {
       fontFamily: {
         'cheetah': ['Cheetah Kick', 'cursive'],
+        'vibes': ['Great Vibes', 'cursive'],
+        'garamond': ['EB Garamond', 'serif'],
+        'lato': ['Lato', 'sans-serif'],
+        'montserrat': ['Montserrat', 'sans-serif'],
+      },
+      fontSize: {
+        'h1-desktop': '60px',
+        'h1-mobile': '42px',
+        'h2-desktop': '40px',
+        'h2-mobile': '28px',
+        'h3-desktop': '28px',
+        'h3-mobile': '20px',
+        'body-desktop': '16px',
+        'body-mobile': '14px',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,13 +75,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Villa Aurora Resort Colors
-        resort: {
-          coral: "hsl(var(--resort-coral))",
-          sage: "hsl(var(--resort-sage))",
-          sunset: "hsl(var(--resort-sunset))",
-          sky: "hsl(var(--resort-sky))",
-        }
+        // Villa Aurora Brand Colors
+        'villa-dark-brown': 'hsl(var(--villa-dark-brown))',
+        'villa-warm-brown': 'hsl(var(--villa-warm-brown))',
+        'villa-pool-blue': 'hsl(var(--villa-pool-blue))',
+        'villa-gold': 'hsl(var(--villa-gold))',
+        'villa-forest-green': 'hsl(var(--villa-forest-green))',
+        'villa-cream': 'hsl(var(--villa-cream))',
+        'villa-beige': 'hsl(var(--villa-beige))',
+        'villa-gray': 'hsl(var(--villa-gray))',
       },
       borderRadius: {
         lg: "var(--radius)",

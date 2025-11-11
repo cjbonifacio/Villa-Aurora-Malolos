@@ -15,14 +15,13 @@ const Index = () => {
       <Weddings />
       <EnhancedContact />
       
-      {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="mb-4">
-            <h3 className="text-2xl font-cheetah text-gradient mb-2">Villa Aurora</h3>
-            <p className="text-primary-foreground/80">Your luxurious haven in Malolos, Bulacan</p>
+            <h3 className="text-3xl font-vibes text-gradient mb-2">Villa Aurora</h3>
+            <p className="text-primary-foreground/80 font-lato">Your luxurious haven in Malolos, Bulacan</p>
           </div>
-          <div className="text-sm text-primary-foreground/60">
+          <div className="text-sm text-primary-foreground/60 font-lato">
             <p>&copy; 2024 Villa Aurora Private Resort. All rights reserved.</p>
             <p className="mt-1">#80 Independencia St., San Gabriel, Malolos, Philippines</p>
           </div>

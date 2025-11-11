@@ -15,13 +15,13 @@ const Packages = () => {
     <section id="packages" className="py-20 gradient-subtle">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4 text-lg px-4 py-2">
+          <Badge variant="secondary" className="mb-4 text-lg px-4 py-2 font-montserrat">
             Packages & Rates
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-6">
+          <h2 className="text-4xl md:text-5xl font-vibes text-gradient mb-6">
             Choose Your Perfect Stay ✨
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-lato">
             Exclusive resort packages designed for intimate getaways and special celebrations
           </p>
         </div>
@@ -145,25 +145,24 @@ const Packages = () => {
           </Card>
         </div>
 
-        {/* Booking Info */}
         <div className="mt-12 text-center">
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4">Booking Information 📋</h3>
+            <h3 className="text-2xl font-garamond font-bold mb-4">Booking Information 📋</h3>
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div className="p-6 bg-card rounded-lg shadow-elegant">
                 <Users className="w-8 h-8 text-primary mx-auto mb-3" />
-                <h4 className="font-semibold mb-2">50% Downpayment</h4>
-                <p className="text-sm text-muted-foreground">Required to secure your booking</p>
+                <h4 className="font-garamond font-semibold mb-2">50% Downpayment</h4>
+                <p className="text-sm text-muted-foreground font-lato">Required to secure your booking</p>
               </div>
               <div className="p-6 bg-card rounded-lg shadow-elegant">
                 <Calendar className="w-8 h-8 text-accent mx-auto mb-3" />
-                <h4 className="font-semibold mb-2">Flexible Rebooking</h4>
-                <p className="text-sm text-muted-foreground">Free rebooking with 7-day notice</p>
+                <h4 className="font-garamond font-semibold mb-2">Flexible Rebooking</h4>
+                <p className="text-sm text-muted-foreground font-lato">Free rebooking with 7-day notice</p>
               </div>
               <div className="p-6 bg-card rounded-lg shadow-elegant">
                 <Sparkles className="w-8 h-8 text-secondary mx-auto mb-3" />
-                <h4 className="font-semibold mb-2">Official Receipts</h4>
-                <p className="text-sm text-muted-foreground">Provided upon request</p>
+                <h4 className="font-garamond font-semibold mb-2">Official Receipts</h4>
+                <p className="text-sm text-muted-foreground font-lato">Provided upon request</p>
               </div>
             </div>
           </div>

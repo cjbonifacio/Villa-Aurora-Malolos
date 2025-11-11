@@ -31,14 +31,14 @@ const Hero = () => {
             <span className="text-white/80 font-medium">Premium Private Resort</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            <span className="font-cheetah">Villa Aurora</span>
-            <span className="block text-3xl md:text-4xl font-light text-secondary mt-2">
+          <h1 className="text-5xl md:text-7xl font-vibes text-white mb-6 leading-tight">
+            Villa Aurora
+            <span className="block text-3xl md:text-4xl font-lato font-light text-secondary mt-2">
               Your Luxurious Haven ✨
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl leading-relaxed">
+          <p className="text-xl md:text-2xl font-lato text-white/90 mb-8 max-w-2xl leading-relaxed">
             Experience the perfect blend of modern comfort and cultural charm in Malolos, Bulacan. 
             Your home away from home for intimate getaways and special celebrations. 🏡
           </p>
@@ -55,11 +55,11 @@ const Hero = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <Button variant="hero" size="xl">
+            <Button variant="hero" size="xl" className="font-montserrat">
               <Calendar className="w-5 h-5" />
               Book Your Stay
             </Button>
-            <Button variant="luxury" size="xl">
+            <Button variant="luxury" size="xl" className="font-montserrat">
               View Packages & Rates
             </Button>
           </div>

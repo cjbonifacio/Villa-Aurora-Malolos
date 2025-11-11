@@ -120,12 +120,12 @@ const InfoTabs = () => {
           <TabsContent value="amenities" className="space-y-16">
             {/* Amenities Section */}
             <div>
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gradient mb-4">Resort Amenities</h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Everything you need for a perfect stay, from relaxation to entertainment and comfort
-                </p>
-              </div>
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-vibes text-gradient mb-4">Resort Amenities</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
+                Everything you need for a perfect stay, from relaxation to entertainment and comfort
+              </p>
+            </div>
               
               <div className="space-y-12">
                 {amenityCategories.map((category, categoryIndex) => (
@@ -169,9 +169,9 @@ const InfoTabs = () => {
               <div className="text-center mb-12">
                 <div className="flex justify-center items-center gap-2 mb-4">
                   <ImageIcon className="h-8 w-8 text-primary" />
-                  <h2 className="text-4xl font-bold text-gradient">Photo Gallery</h2>
+                  <h2 className="text-4xl font-vibes text-gradient">Photo Gallery</h2>
                 </div>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
                   Discover the beauty and charm of Villa Aurora through our collection of spaces
                 </p>
               </div>
@@ -211,11 +211,10 @@ const InfoTabs = () => {
             </div>
           </TabsContent>
 
-          {/* Calendar Availability Tab */}
           <TabsContent value="calendar">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gradient mb-4">Check Availability</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <h2 className="text-4xl font-vibes text-gradient mb-4">Check Availability</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
                 View our real-time availability calendar - Green dates are available, Red dates are booked
               </p>
             </div>
@@ -223,11 +222,10 @@ const InfoTabs = () => {
             <AvailabilityCalendar />
           </TabsContent>
 
-          {/* Terms of Use Tab */}
           <TabsContent value="terms">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gradient mb-4">Terms of Use & Policies</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <h2 className="text-4xl font-vibes text-gradient mb-4">Terms of Use & Policies</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
                 Please review our policies to ensure a smooth and enjoyable experience at Villa Aurora
               </p>
             </div>

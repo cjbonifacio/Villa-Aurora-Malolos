@@ -10,130 +10,161 @@
   font-display: swap;
 }
 
-/* Villa Aurora Resort Design System - Luxurious yet Accessible Haven
-All colors MUST be HSL. Resort-inspired palette with tropical blues, warm golds, and earth tones.
-*/
+/* Villa Aurora Design System - Typography */
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2 {
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+h3, h4 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 60px;
+}
+
+h2 {
+  font-size: 40px;
+}
+
+h3 {
+  font-size: 28px;
+}
+
+button, .btn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 42px;
+  }
+  
+  h2 {
+    font-size: 28px;
+  }
+  
+  h3 {
+    font-size: 20px;
+  }
+}
+
+/* Villa Aurora Design System - Colors (Non-negotiable) */
 
 @layer base {
   :root {
-    /* Base Colors - Clean and elegant */
-    --background: 40 40% 98%;
-    --foreground: 25 15% 15%;
-
-    /* Card & Surface Colors */
-    --card: 0 0% 100%;
-    --card-foreground: 25 15% 15%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 25 15% 15%;
-
-    /* Primary - Deep Ocean Blue (Villa Aurora's signature) */
-    --primary: 200 85% 25%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 200 85% 45%;
-
-    /* Secondary - Warm Golden (Luxury accent) */
-    --secondary: 40 75% 55%;
-    --secondary-foreground: 25 15% 15%;
-
-    /* Muted - Soft neutrals */
-    --muted: 30 15% 92%;
-    --muted-foreground: 25 15% 45%;
-
-    /* Accent - Tropical Teal */
-    --accent: 180 65% 50%;
-    --accent-foreground: 0 0% 98%;
-
-    /* Resort-specific colors */
-    --resort-coral: 15 85% 65%;
-    --resort-sage: 120 25% 65%;
-    --resort-sunset: 25 90% 60%;
-    --resort-sky: 200 75% 85%;
-
+    /* Primary Browns */
+    --background: 39 38% 93%; /* Cream #F5F1E8 */
+    --foreground: 0 0% 17%; /* Charcoal #2C2C2C */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 0 0% 17%; /* Charcoal */
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 17%; /* Charcoal */
+    
+    /* Primary - Rich Brown #6B4423 */
+    --primary: 26 52% 28%;
+    --primary-foreground: 39 38% 93%; /* Cream */
+    
+    /* Secondary - Gold/Orange Accent #D4A574 */
+    --secondary: 31 51% 65%;
+    --secondary-foreground: 0 0% 17%; /* Charcoal */
+    
+    /* Muted - Beige #E8DCC8 */
+    --muted: 39 39% 84%;
+    --muted-foreground: 0 0% 17%; /* Charcoal */
+    
+    /* Accent - Pool Blue #0099CC */
+    --accent: 195 100% 40%;
+    --accent-foreground: 0 0% 100%; /* White */
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Borders */
+    --border: 39 39% 84%; /* Beige */
+    --input: 39 39% 84%; /* Beige */
+    --ring: 26 52% 28%; /* Rich Brown */
+    
+    /* Villa Aurora Brand Colors */
+    --villa-dark-brown: 21 33% 27%; /* #5C3D2E */
+    --villa-warm-brown: 27 42% 31%; /* #704B2E */
+    --villa-pool-blue: 195 100% 40%; /* #0099CC */
+    --villa-gold: 31 51% 65%; /* #D4A574 */
+    --villa-forest-green: 97 41% 39%; /* #5A8C3A */
+    --villa-cream: 39 38% 93%; /* #F5F1E8 */
+    --villa-beige: 39 39% 84%; /* #E8DCC8 */
+    --villa-gray: 0 0% 60%; /* #999999 */
+    
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-sunset: linear-gradient(135deg, hsl(var(--resort-sunset)), hsl(var(--resort-coral)));
-    --gradient-ocean: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
-
-    /* Shadows with resort ambiance */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
-    --shadow-warm: 0 8px 25px -8px hsl(var(--resort-sunset) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.15);
-
+    --gradient-primary: linear-gradient(135deg, hsl(26 52% 28%), hsl(31 51% 65%));
+    --gradient-sunset: linear-gradient(135deg, hsl(31 51% 65%), hsl(195 100% 40%));
+    --gradient-ocean: linear-gradient(135deg, hsl(195 100% 40%), hsl(97 41% 39%));
+    --gradient-subtle: linear-gradient(180deg, hsl(39 38% 93%), hsl(39 39% 84%));
+    
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(26 52% 28% / 0.3);
+    --shadow-warm: 0 8px 25px -8px hsl(31 51% 65% / 0.3);
+    --shadow-glow: 0 0 40px hsl(195 100% 40% / 0.2);
+    
     /* Animations */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 30 15% 88%;
-    --input: 30 15% 88%;
-    --ring: 200 85% 25%;
-
-    --radius: 0.5rem;
-
+    
+    --radius: 0.75rem;
+    
     --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 0 0% 17%;
+    --sidebar-primary: 26 52% 28%;
+    --sidebar-primary-foreground: 39 38% 93%;
+    --sidebar-accent: 39 39% 84%;
+    --sidebar-accent-foreground: 0 0% 17%;
+    --sidebar-border: 39 39% 84%;
+    --sidebar-ring: 26 52% 28%;
   }
-
+  
   .dark {
-    /* Dark mode for evening/night ambiance */
-    --background: 25 15% 8%;
-    --foreground: 40 40% 95%;
-
-    --card: 25 15% 12%;
-    --card-foreground: 40 40% 95%;
-
-    --popover: 25 15% 12%;
-    --popover-foreground: 40 40% 95%;
-
-    --primary: 200 75% 60%;
-    --primary-foreground: 25 15% 8%;
-    --primary-glow: 200 85% 70%;
-
-    --secondary: 40 65% 45%;
-    --secondary-foreground: 40 40% 95%;
-
-    --muted: 25 15% 18%;
-    --muted-foreground: 40 20% 65%;
-
-    --accent: 180 55% 40%;
-    --accent-foreground: 40 40% 95%;
-
-    --resort-coral: 15 75% 55%;
-    --resort-sage: 120 20% 55%;
-    --resort-sunset: 25 80% 50%;
-    --resort-sky: 200 65% 75%;
-
+    --background: 21 33% 27%; /* Dark Brown */
+    --foreground: 39 38% 93%; /* Cream */
+    --card: 27 42% 31%; /* Warm Brown */
+    --card-foreground: 39 38% 93%; /* Cream */
+    --popover: 27 42% 31%; /* Warm Brown */
+    --popover-foreground: 39 38% 93%; /* Cream */
+    --primary: 26 52% 28%; /* Rich Brown */
+    --primary-foreground: 39 38% 93%; /* Cream */
+    --secondary: 31 51% 65%; /* Gold */
+    --secondary-foreground: 0 0% 17%; /* Charcoal */
+    --muted: 27 42% 31%; /* Warm Brown */
+    --muted-foreground: 39 39% 84%; /* Beige */
+    --accent: 195 100% 40%; /* Pool Blue */
+    --accent-foreground: 0 0% 100%; /* White */
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 25 15% 22%;
-    --input: 25 15% 22%;
-    --ring: 200 75% 60%;
-    --sidebar-background: 25 15% 10%;
-    --sidebar-foreground: 40 40% 90%;
-    --sidebar-primary: 200 75% 50%;
-    --sidebar-primary-foreground: 25 15% 8%;
-    --sidebar-accent: 25 15% 16%;
-    --sidebar-accent-foreground: 40 40% 90%;
-    --sidebar-border: 25 15% 20%;
-    --sidebar-ring: 200 75% 60%;
+    --destructive-foreground: 39 38% 93%;
+    --border: 27 42% 31%; /* Warm Brown */
+    --input: 27 42% 31%; /* Warm Brown */
+    --ring: 31 51% 65%; /* Gold */
+    --sidebar-background: 21 33% 27%;
+    --sidebar-foreground: 39 38% 93%;
+    --sidebar-primary: 31 51% 65%;
+    --sidebar-primary-foreground: 0 0% 17%;
+    --sidebar-accent: 27 42% 31%;
+    --sidebar-accent-foreground: 39 38% 93%;
+    --sidebar-border: 27 42% 31%;
+    --sidebar-ring: 31 51% 65%;
   }
 }
 
@@ -143,10 +174,10 @@ All colors MUST be HSL. Resort-inspired palette with tropical blues, warm golds,
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 
-  /* Custom scrollbar for a more luxurious feel */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -165,7 +196,7 @@ All colors MUST be HSL. Resort-inspired palette with tropical blues, warm golds,
 }
 
 @layer utilities {
-  /* Resort-specific utility classes */
+  /* Villa Aurora utility classes */
   .gradient-primary {
     background: var(--gradient-primary);
   }
@@ -204,10 +235,10 @@ All colors MUST be HSL. Resort-inspired palette with tropical blues, warm golds,
 
   /* Text gradients */
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
   }
   
   .text-sunset {
-    @apply bg-gradient-to-r from-resort-sunset to-resort-coral bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent;
   }
 }
