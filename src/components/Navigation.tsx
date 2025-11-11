@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, Calendar } from "lucide-react";
+import logo from "@/assets/villa-aurora-logo.png";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,9 +11,10 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-gradient">
-              Villa Aurora 🏡
+          <div className="flex items-center space-x-3">
+            <img src={logo} alt="Villa Aurora Logo" className="h-12 w-12 object-contain" />
+            <div className="text-2xl font-cheetah text-gradient">
+              Villa Aurora
             </div>
           </div>
 
@@ -24,14 +26,11 @@ const Navigation = () => {
             <a href="#packages" className="text-foreground hover:text-primary transition-smooth">
               Packages
             </a>
-            <a href="#amenities" className="text-foreground hover:text-primary transition-smooth">
-              Amenities
+            <a href="#info" className="text-foreground hover:text-primary transition-smooth">
+              Amenities & Gallery
             </a>
             <a href="#weddings" className="text-foreground hover:text-primary transition-smooth">
               Weddings
-            </a>
-            <a href="#gallery" className="text-foreground hover:text-primary transition-smooth">
-              Gallery
             </a>
             <a href="#contact" className="text-foreground hover:text-primary transition-smooth">
               Contact
@@ -70,14 +69,11 @@ const Navigation = () => {
             <a href="#packages" className="block py-2 text-foreground hover:text-primary transition-smooth">
               Packages
             </a>
-            <a href="#amenities" className="block py-2 text-foreground hover:text-primary transition-smooth">
-              Amenities
+            <a href="#info" className="block py-2 text-foreground hover:text-primary transition-smooth">
+              Amenities & Gallery
             </a>
             <a href="#weddings" className="block py-2 text-foreground hover:text-primary transition-smooth">
               Weddings
-            </a>
-            <a href="#gallery" className="block py-2 text-foreground hover:text-primary transition-smooth">
-              Gallery
             </a>
             <a href="#contact" className="block py-2 text-foreground hover:text-primary transition-smooth">
               Contact

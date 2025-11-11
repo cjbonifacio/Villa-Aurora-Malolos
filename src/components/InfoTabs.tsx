@@ -1,11 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
 import { Waves, Bed, Wifi, Car, ChefHat, Music, Gamepad2, Utensils, Users, Droplets, Camera, Image as ImageIcon, CalendarIcon, FileText } from "lucide-react";
-import { useState } from "react";
+import AvailabilityCalendar from "./AvailabilityCalendar";
 
 const InfoTabs = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
 
   const amenityCategories = [
     {
@@ -218,67 +216,11 @@ const InfoTabs = () => {
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold text-gradient mb-4">Check Availability</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Select your preferred dates and check real-time availability for your stay
+                View our real-time availability calendar - Green dates are available, Red dates are booked
               </p>
             </div>
 
-            <div className="max-w-4xl mx-auto">
-              <Card className="shadow-elegant">
-                <CardContent className="p-8">
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="flex flex-col items-center justify-center">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        className="rounded-md border"
-                      />
-                    </div>
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-2xl font-bold mb-4">Booking Legend</h3>
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 rounded bg-green-500"></div>
-                            <span className="text-sm">Available</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 rounded bg-yellow-500"></div>
-                            <span className="text-sm">Pending Confirmation</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 rounded bg-red-500"></div>
-                            <span className="text-sm">Fully Booked</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                        <h4 className="font-semibold mb-2">Selected Date:</h4>
-                        <p className="text-lg text-primary">
-                          {date ? date.toLocaleDateString('en-US', { 
-                            weekday: 'long', 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          }) : 'No date selected'}
-                        </p>
-                      </div>
-
-                      <div className="p-4 bg-muted/50 rounded-lg">
-                        <h4 className="font-semibold mb-2">💡 Booking Tips:</h4>
-                        <ul className="text-sm text-muted-foreground space-y-1">
-                          <li>• Weekend rates apply for Friday-Saturday</li>
-                          <li>• 50% downpayment required to secure booking</li>
-                          <li>• Book at least 7 days in advance for best availability</li>
-                          <li>• Contact us for custom packages and inquiries</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            <AvailabilityCalendar />
           </TabsContent>
 
           {/* Terms of Use Tab */}

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Cheetah Kick';
+  src: url('/fonts/Cheetah-Kick.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Villa Aurora Resort Design System - Luxurious yet Accessible Haven
 All colors MUST be HSL. Resort-inspired palette with tropical blues, warm golds, and earth tones.
 */

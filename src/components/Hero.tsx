@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Star, Users } from "lucide-react";
-import heroImage from "@/assets/villa-aurora-hero.jpg";
+import heroImage from "@/assets/villa-exterior.jpg";
 
 const Hero = () => {
   return (
@@ -32,7 +32,7 @@ const Hero = () => {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Villa Aurora
+            <span className="font-cheetah">Villa Aurora</span>
             <span className="block text-3xl md:text-4xl font-light text-secondary mt-2">
               Your Luxurious Haven ✨
             </span>
