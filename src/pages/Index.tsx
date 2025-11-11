@@ -1,9 +1,8 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Packages from "@/components/Packages";
-import EnhancedAmenities from "@/components/EnhancedAmenities";
+import InfoTabs from "@/components/InfoTabs";
 import Weddings from "@/components/Weddings";
-import Gallery from "@/components/Gallery";
 import EnhancedContact from "@/components/EnhancedContact";
 
 const Index = () => {
@@ -12,9 +11,8 @@ const Index = () => {
       <Navigation />
       <Hero />
       <Packages />
-      <EnhancedAmenities />
+      <InfoTabs />
       <Weddings />
-      <Gallery />
       <EnhancedContact />
       
       {/* Footer */}
