@@ -31,10 +31,10 @@ const Hero = () => {
             <span className="text-white/80 font-medium">Premium Private Resort</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-vibes text-white mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-cheetah title-outline text-white mb-6 leading-tight">
             Villa Aurora
             <span className="block text-3xl md:text-4xl font-lato font-light text-secondary mt-2">
-              Your Luxurious Haven ✨
+              Your Luxurious Haven
             </span>
           </h1>
 

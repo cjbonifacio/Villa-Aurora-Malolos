@@ -18,7 +18,7 @@ const Index = () => {
       <footer className="bg-primary text-primary-foreground py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="mb-4">
-            <h3 className="text-3xl font-vibes text-gradient mb-2">Villa Aurora</h3>
+            <h3 className="text-3xl font-cheetah text-secondary mb-2">Villa Aurora</h3>
             <p className="text-primary-foreground/80 font-lato">Your luxurious haven in Malolos, Bulacan</p>
           </div>
           <div className="text-sm text-primary-foreground/60 font-lato">

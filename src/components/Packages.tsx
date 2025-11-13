@@ -18,8 +18,8 @@ const Packages = () => {
           <Badge variant="secondary" className="mb-4 text-lg px-4 py-2 font-montserrat">
             Packages & Rates
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-vibes text-gradient mb-6">
-            Choose Your Perfect Stay ✨
+          <h2 className="text-4xl md:text-5xl font-cheetah title-outline text-primary mb-6">
+            Choose Your Perfect Stay
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-lato">
             Exclusive resort packages designed for intimate getaways and special celebrations

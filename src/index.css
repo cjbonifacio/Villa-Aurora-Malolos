@@ -18,9 +18,15 @@ body {
 }
 
 h1, h2 {
-  font-family: 'Great Vibes', cursive;
+  font-family: 'Cheetah Kick', cursive;
   font-weight: 400;
   line-height: 1.2;
+  text-shadow: 
+    -1px -1px 0 hsl(var(--primary)),
+    1px -1px 0 hsl(var(--primary)),
+    -1px 1px 0 hsl(var(--primary)),
+    1px 1px 0 hsl(var(--primary)),
+    0 0 15px hsl(var(--primary) / 0.3);
 }
 
 h3, h4 {
@@ -240,5 +246,20 @@ button, .btn {
   
   .text-sunset {
     @apply bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Title outline effect */
+  .title-outline {
+    text-shadow: 
+      -2px -2px 0 hsl(var(--primary)),
+      2px -2px 0 hsl(var(--primary)),
+      -2px 2px 0 hsl(var(--primary)),
+      2px 2px 0 hsl(var(--primary)),
+      0 0 20px hsl(var(--secondary) / 0.4);
+  }
+
+  .title-elegant {
+    font-family: 'Cheetah Kick', cursive;
+    letter-spacing: 0.02em;
   }
 }
