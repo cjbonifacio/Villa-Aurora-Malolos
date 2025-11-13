@@ -1,46 +1,41 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Camera, Image as ImageIcon } from "lucide-react";
+import roomSimple from "@/assets/room-simple.jpg";
+import roomBunk from "@/assets/room-bunk.jpg";
+import roomFamily from "@/assets/room-family.jpg";
+import poolArea from "@/assets/pool-area.jpg";
+import outdoorSpace from "@/assets/outdoor-space.jpg";
+import diningArea from "@/assets/dining-area.jpg";
+import loungeArea from "@/assets/lounge-area.jpg";
+import aerialView from "@/assets/aerial-view.jpg";
 
 const Gallery = () => {
   const galleryCategories = [
     {
-      title: "Swimming Pool & Outdoor Area",
-      description: "Dive into relaxation at our pristine pools",
-      images: [
-        { placeholder: "Family enjoying a sunny day by the pool" },
-        { placeholder: "Evening poolside ambiance with lighting" },
-        { placeholder: "Kids splashing in the kiddie pool" },
-        { placeholder: "Poolside BBQ gathering with friends" }
-      ]
-    },
-    {
       title: "Cozy Rooms & Accommodations",
       description: "Comfortable spaces for your perfect stay",
       images: [
-        { placeholder: "Spacious air-conditioned master bedroom" },
-        { placeholder: "Bunk beds perfect for family groups" },
-        { placeholder: "Cozy room setup for intimate gatherings" },
-        { placeholder: "Well-appointed room with modern amenities" }
+        { src: roomSimple, alt: "Spacious air-conditioned room with queen bed" },
+        { src: roomBunk, alt: "Bunk beds perfect for family groups" },
+        { src: roomFamily, alt: "Family suite with traditional Filipino design" },
       ]
     },
     {
-      title: "Kitchen & Dining",
-      description: "Fully equipped for your culinary adventures",
+      title: "Swimming Pool & Outdoor Area",
+      description: "Dive into relaxation at our pristine pools",
       images: [
-        { placeholder: "Modern kitchen with complete appliances" },
-        { placeholder: "BBQ griller setup for outdoor cooking" },
-        { placeholder: "Dining area set for family meals" },
-        { placeholder: "Kitchen island perfect for food preparation" }
+        { src: poolArea, alt: "Main swimming pool area" },
+        { src: outdoorSpace, alt: "Lush outdoor garden space" },
+        { src: aerialView, alt: "Aerial view of Villa Aurora" },
       ]
     },
     {
-      title: "Guest Celebrations",
-      description: "Memorable moments and joyful gatherings",
+      title: "Common Areas & Entertainment",
+      description: "Shared spaces for gathering and creating memories",
       images: [
-        { placeholder: "Birthday celebration by the poolside" },
-        { placeholder: "Family reunion group photo" },
-        { placeholder: "Wedding preparation in the bridal suite" },
-        { placeholder: "Anniversary dinner setup under the stars" }
+        { src: loungeArea, alt: "Comfortable lounge and living area" },
+        { src: diningArea, alt: "Spacious dining area for gatherings" },
+        { src: outdoorSpace, alt: "Outdoor entertainment space" },
       ]
     }
   ];
@@ -67,31 +62,29 @@ const Gallery = () => {
             <div key={categoryIndex}>
               {/* Category Header */}
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">{category.title}</h2>
+                <h2 className="text-3xl font-bold mb-4 font-cheetah title-outline">{category.title}</h2>
                 <p className="text-muted-foreground text-lg">{category.description}</p>
               </div>
 
               {/* Image Grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {category.images.map((image, imageIndex) => (
                   <Card key={imageIndex} className="group overflow-hidden border-0 shadow-elegant hover:shadow-glow transition-all duration-300 hover:-translate-y-1">
                     <CardContent className="p-0">
-                      <div className="aspect-square relative bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-                        {/* Placeholder Content */}
-                        <div className="text-center p-6">
-                          <Camera className="h-12 w-12 text-primary/60 mx-auto mb-3 group-hover:text-primary/80 transition-colors" />
-                          <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                            {image.placeholder}
-                          </p>
-                        </div>
+                      <div className="aspect-[4/3] relative overflow-hidden">
+                        <img 
+                          src={image.src} 
+                          alt={image.alt}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
                         
                         {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         
                         {/* View Button (appears on hover) */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
-                            <ImageIcon className="h-6 w-6 text-primary" />
+                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 shadow-lg">
+                            <Camera className="h-8 w-8 text-primary" />
                           </div>
                         </div>
                       </div>
@@ -115,7 +108,7 @@ const Gallery = () => {
               <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
                 <span className="bg-muted/50 px-3 py-1 rounded-full">#VillaAuroraMalolos</span>
                 <span className="bg-muted/50 px-3 py-1 rounded-full">#ResortLife</span>
-                <span className="bg-muted/50 px-3 py-1 rounded-full">#BulacnGetaway</span>
+                <span className="bg-muted/50 px-3 py-1 rounded-full">#BulacanGetaway</span>
               </div>
             </CardContent>
           </Card>

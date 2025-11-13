@@ -13,7 +13,7 @@
 /* Villa Aurora Design System - Typography */
 body {
   font-family: 'Lato', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.6;
 }
 
@@ -22,11 +22,15 @@ h1, h2 {
   font-weight: 400;
   line-height: 1.2;
   text-shadow: 
-    -1px -1px 0 hsl(var(--primary)),
-    1px -1px 0 hsl(var(--primary)),
-    -1px 1px 0 hsl(var(--primary)),
-    1px 1px 0 hsl(var(--primary)),
-    0 0 15px hsl(var(--primary) / 0.3);
+    -2px -2px 0 #6B4423,
+    2px -2px 0 #6B4423,
+    -2px 2px 0 #6B4423,
+    2px 2px 0 #6B4423,
+    -3px -3px 0 #FFFFFF,
+    3px -3px 0 #FFFFFF,
+    -3px 3px 0 #FFFFFF,
+    3px 3px 0 #FFFFFF,
+    4px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 h3, h4 {
@@ -36,15 +40,15 @@ h3, h4 {
 }
 
 h1 {
-  font-size: 60px;
+  font-size: 68px;
 }
 
 h2 {
-  font-size: 40px;
+  font-size: 48px;
 }
 
 h3 {
-  font-size: 28px;
+  font-size: 32px;
 }
 
 button, .btn {
@@ -54,19 +58,19 @@ button, .btn {
 
 @media (max-width: 768px) {
   body {
-    font-size: 14px;
+    font-size: 16px;
   }
   
   h1 {
-    font-size: 42px;
+    font-size: 48px;
   }
   
   h2 {
-    font-size: 28px;
+    font-size: 32px;
   }
   
   h3 {
-    font-size: 20px;
+    font-size: 24px;
   }
 }
 
@@ -251,11 +255,15 @@ button, .btn {
   /* Title outline effect */
   .title-outline {
     text-shadow: 
-      -2px -2px 0 hsl(var(--primary)),
-      2px -2px 0 hsl(var(--primary)),
-      -2px 2px 0 hsl(var(--primary)),
-      2px 2px 0 hsl(var(--primary)),
-      0 0 20px hsl(var(--secondary) / 0.4);
+      -2px -2px 0 #6B4423,
+      2px -2px 0 #6B4423,
+      -2px 2px 0 #6B4423,
+      2px 2px 0 #6B4423,
+      -3px -3px 0 #FFFFFF,
+      3px -3px 0 #FFFFFF,
+      -3px 3px 0 #FFFFFF,
+      3px 3px 0 #FFFFFF,
+      4px 4px 8px rgba(0, 0, 0, 0.3);
   }
 
   .title-elegant {
