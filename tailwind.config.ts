@@ -14,11 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
+        'sans': ['Inter', 'sans-serif'],
         'cheetah': ['Cheetah Kick', 'cursive'],
-        'vibes': ['Great Vibes', 'cursive'],
-        'garamond': ['EB Garamond', 'serif'],
-        'lato': ['Lato', 'sans-serif'],
-        'montserrat': ['Montserrat', 'sans-serif'],
       },
       fontSize: {
         'h1-desktop': '60px',
