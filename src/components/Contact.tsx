@@ -172,13 +172,17 @@ const Contact = () => {
                 Contact us now to check availability and secure your perfect getaway at Villa Aurora
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="luxury" size="lg" className="bg-white/20 text-white border-white/30 hover:bg-white/30">
-                  <Phone className="w-5 h-5" />
-                  Call (0953) 357 2419
+                <Button variant="luxury" size="lg" className="bg-white/20 text-white border-white/30 hover:bg-white/30" asChild>
+                  <a href="tel:+639062336008">
+                    <Phone className="w-5 h-5" />
+                    Call Now
+                  </a>
                 </Button>
-                <Button variant="secondary" size="lg">
-                  <MessageCircle className="w-5 h-5" />
-                  Send Message
+                <Button variant="secondary" size="lg" asChild>
+                  <a href="https://www.facebook.com/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-5 h-5" />
+                    Book on Facebook
+                  </a>
                 </Button>
               </div>
             </CardContent>

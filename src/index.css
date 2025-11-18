@@ -12,7 +12,7 @@
 
 /* Villa Aurora Design System - Typography */
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 18px;
   line-height: 1.6;
 }
@@ -34,7 +34,7 @@ h1, h2 {
 }
 
 h3, h4 {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -52,7 +52,7 @@ h3 {
 }
 
 button, .btn {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
 }
 
@@ -86,13 +86,13 @@ button, .btn {
     --popover: 0 0% 100%; /* White */
     --popover-foreground: 0 0% 17%; /* Charcoal */
     
-    /* Primary - Rich Brown #6B4423 */
-    --primary: 26 52% 28%;
-    --primary-foreground: 39 38% 93%; /* Cream */
+    /* Primary - Warm Brown/Gold #a28b6e */
+    --primary: 31 25% 53%;
+    --primary-foreground: 0 0% 100%; /* White */
     
-    /* Secondary - Gold/Orange Accent #D4A574 */
-    --secondary: 31 51% 65%;
-    --secondary-foreground: 0 0% 17%; /* Charcoal */
+    /* Secondary - Deep Brown #795548 */
+    --secondary: 18 29% 40%;
+    --secondary-foreground: 0 0% 100%; /* White */
     
     /* Muted - Beige #E8DCC8 */
     --muted: 39 39% 84%;
@@ -148,33 +148,33 @@ button, .btn {
   }
   
   .dark {
-    --background: 21 33% 27%; /* Dark Brown */
-    --foreground: 39 38% 93%; /* Cream */
-    --card: 27 42% 31%; /* Warm Brown */
-    --card-foreground: 39 38% 93%; /* Cream */
-    --popover: 27 42% 31%; /* Warm Brown */
-    --popover-foreground: 39 38% 93%; /* Cream */
-    --primary: 26 52% 28%; /* Rich Brown */
-    --primary-foreground: 39 38% 93%; /* Cream */
-    --secondary: 31 51% 65%; /* Gold */
-    --secondary-foreground: 0 0% 17%; /* Charcoal */
-    --muted: 27 42% 31%; /* Warm Brown */
-    --muted-foreground: 39 39% 84%; /* Beige */
-    --accent: 195 100% 40%; /* Pool Blue */
+    --background: 18 29% 40%; /* Deep Brown #795548 */
+    --foreground: 0 0% 95%; /* Light gray */
+    --card: 18 29% 35%; /* Slightly lighter deep brown */
+    --card-foreground: 0 0% 95%; /* Light gray */
+    --popover: 18 29% 35%; /* Slightly lighter deep brown */
+    --popover-foreground: 0 0% 95%; /* Light gray */
+    --primary: 31 25% 53%; /* Warm Brown/Gold #a28b6e */
+    --primary-foreground: 0 0% 100%; /* White */
+    --secondary: 18 29% 40%; /* Deep Brown */
+    --secondary-foreground: 0 0% 100%; /* White */
+    --muted: 18 29% 35%; /* Slightly lighter deep brown */
+    --muted-foreground: 0 0% 70%; /* Light gray */
+    --accent: 31 25% 53%; /* Warm Brown/Gold */
     --accent-foreground: 0 0% 100%; /* White */
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 39 38% 93%;
-    --border: 27 42% 31%; /* Warm Brown */
-    --input: 27 42% 31%; /* Warm Brown */
-    --ring: 31 51% 65%; /* Gold */
-    --sidebar-background: 21 33% 27%;
-    --sidebar-foreground: 39 38% 93%;
-    --sidebar-primary: 31 51% 65%;
-    --sidebar-primary-foreground: 0 0% 17%;
-    --sidebar-accent: 27 42% 31%;
-    --sidebar-accent-foreground: 39 38% 93%;
-    --sidebar-border: 27 42% 31%;
-    --sidebar-ring: 31 51% 65%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 18 29% 45%; /* Lighter deep brown */
+    --input: 18 29% 35%; /* Slightly lighter deep brown */
+    --ring: 31 25% 53%; /* Warm Brown/Gold */
+    --sidebar-background: 18 29% 40%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 31 25% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 18 29% 35%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 18 29% 45%;
+    --sidebar-ring: 31 25% 53%;
   }
 }
 

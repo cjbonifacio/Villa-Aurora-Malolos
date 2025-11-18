@@ -39,13 +39,17 @@ const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <Button variant="luxury" size="sm">
-              <Phone className="w-4 h-4" />
-              Call Now
+            <Button variant="luxury" size="sm" asChild>
+              <a href="tel:+639062336008">
+                <Phone className="w-4 h-4" />
+                Call Now
+              </a>
             </Button>
-            <Button variant="booking" size="sm">
-              <Calendar className="w-4 h-4" />
-              Book Now
+            <Button variant="booking" size="sm" asChild>
+              <a href="https://www.facebook.com/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
+                <Calendar className="w-4 h-4" />
+                Book Now
+              </a>
             </Button>
           </div>
 
@@ -79,13 +83,17 @@ const Navigation = () => {
               Contact
             </a>
             <div className="flex flex-col space-y-3 pt-4">
-              <Button variant="luxury" size="sm">
-                <Phone className="w-4 h-4" />
-                Call Now
+              <Button variant="luxury" size="sm" asChild>
+                <a href="tel:+639062336008">
+                  <Phone className="w-4 h-4" />
+                  Call Now
+                </a>
               </Button>
-              <Button variant="booking" size="sm">
-                <Calendar className="w-4 h-4" />
-                Book Now
+              <Button variant="booking" size="sm" asChild>
+                <a href="https://www.facebook.com/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
+                  <Calendar className="w-4 h-4" />
+                  Book Now
+                </a>
               </Button>
             </div>
           </div>
