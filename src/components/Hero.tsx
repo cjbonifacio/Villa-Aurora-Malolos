@@ -55,12 +55,21 @@ const Hero = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <Button variant="hero" size="xl" className="font-montserrat">
-              <Calendar className="w-5 h-5" />
-              Book Your Stay
+            <Button variant="hero" size="xl" className="font-montserrat" asChild>
+              <a href="https://www.facebook.com/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
+                <Calendar className="w-5 h-5" />
+                Book Your Stay
+              </a>
             </Button>
-            <Button variant="luxury" size="xl" className="font-montserrat">
-              View Packages & Rates
+            <Button 
+              variant="luxury" 
+              size="xl" 
+              className="font-montserrat"
+              onClick={() => {
+                document.querySelector('#packages')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              View Packages
             </Button>
           </div>
 

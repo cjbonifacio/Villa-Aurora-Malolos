@@ -20,19 +20,54 @@ const Navigation = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#home" 
+              className="text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#home')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Home
             </a>
-            <a href="#packages" className="text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#packages" 
+              className="text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#packages')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Packages
             </a>
-            <a href="#info" className="text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#info" 
+              className="text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#info')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Amenities & Gallery
             </a>
-            <a href="#weddings" className="text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#weddings" 
+              className="text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#weddings')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Weddings
             </a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#contact" 
+              className="text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Contact
             </a>
           </div>
@@ -67,19 +102,59 @@ const Navigation = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border">
           <div className="px-4 py-6 space-y-4">
-            <a href="#home" className="block py-2 text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#home" 
+              className="block py-2 text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                document.querySelector('#home')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Home
             </a>
-            <a href="#packages" className="block py-2 text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#packages" 
+              className="block py-2 text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                document.querySelector('#packages')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Packages
             </a>
-            <a href="#info" className="block py-2 text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#info" 
+              className="block py-2 text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                document.querySelector('#info')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Amenities & Gallery
             </a>
-            <a href="#weddings" className="block py-2 text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#weddings" 
+              className="block py-2 text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                document.querySelector('#weddings')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Weddings
             </a>
-            <a href="#contact" className="block py-2 text-foreground hover:text-primary transition-smooth">
+            <a 
+              href="#contact" 
+              className="block py-2 text-foreground hover:text-primary transition-smooth"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Contact
             </a>
             <div className="flex flex-col space-y-3 pt-4">
