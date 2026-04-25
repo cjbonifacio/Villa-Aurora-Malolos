@@ -21,16 +21,7 @@ h1, h2 {
   font-family: 'Cheetah Kick', cursive;
   font-weight: 400;
   line-height: 1.2;
-  text-shadow: 
-    -2px -2px 0 #6B4423,
-    2px -2px 0 #6B4423,
-    -2px 2px 0 #6B4423,
-    2px 2px 0 #6B4423,
-    -3px -3px 0 #FFFFFF,
-    3px -3px 0 #FFFFFF,
-    -3px 3px 0 #FFFFFF,
-    3px 3px 0 #FFFFFF,
-    4px 4px 8px rgba(0, 0, 0, 0.3);
+  color: #D4A574;
 }
 
 h3, h4 {
@@ -252,18 +243,9 @@ button, .btn {
     @apply bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent;
   }
 
-  /* Title outline effect */
+  /* Title outline effect (legacy - kept simple) */
   .title-outline {
-    text-shadow: 
-      -2px -2px 0 #6B4423,
-      2px -2px 0 #6B4423,
-      -2px 2px 0 #6B4423,
-      2px 2px 0 #6B4423,
-      -3px -3px 0 #FFFFFF,
-      3px -3px 0 #FFFFFF,
-      -3px 3px 0 #FFFFFF,
-      3px 3px 0 #FFFFFF,
-      4px 4px 8px rgba(0, 0, 0, 0.3);
+    color: #D4A574;
   }
 
   .title-elegant {
