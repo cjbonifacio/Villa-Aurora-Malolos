@@ -13,7 +13,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img src={logo} alt="Villa Aurora Logo" className="h-12 w-12 object-contain" />
-            <div className="text-2xl font-cheetah text-primary">
+            <div className="text-3xl md:text-4xl font-cheetah text-primary">
               Villa Aurora
             </div>
           </div>
