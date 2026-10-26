@@ -31,6 +31,22 @@ The code is ready. These steps need your own accounts, so you do them once.
 - Make your Google Calendar private (Calendar settings → Access permissions → untick
   "Make available to public"). The website no longer uses it.
 
+## 5. Analytics (visitor stats + page speed)
+The code is already in. Turn it on once in Vercel:
+- Project → **Analytics** → **Enable** (visitor stats, no cookies).
+- Project → **Speed Insights** → **Enable** (real page speed from visitors' phones).
+
+## 6. Google and Facebook
+- Google Search Console (https://search.google.com/search-console) → add
+  `https://villa-aurora-malolos.vercel.app` → submit `sitemap.xml`.
+- Check the link preview: https://developers.facebook.com/tools/debug → paste the site URL → **Scrape Again**.
+- If you buy a custom domain later, replace `villa-aurora-malolos.vercel.app` in `index.html`,
+  `public/sitemap.xml`, `public/robots.txt` and `src/lib/usePageMeta.ts`.
+
+## 7. Legal pages
+`/privacy` and `/terms` are plain-language drafts based on your current house rules and the
+Data Privacy Act of 2012. Read them once, and have a lawyer check them if you want certainty.
+
 ## Run it on your computer (optional)
 1. Copy `.env.example` to `.env.local` and fill in the two values.
 2. `npm install` then `npm run dev` → open http://localhost:8080

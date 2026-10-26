@@ -2,61 +2,80 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Villa Aurora Malolos - Luxury Private Resort | Book Your Perfect Stay</title>
-    <meta name="description" content="Villa Aurora Malolos - Premium private resort in Bulacan near Barasoain Church. Book overnight stays & day tours. 3 AC rooms, swimming pools, up to 22 guests. Your luxurious haven for family getaways and events." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Villa Aurora Malolos | Private Resort with Pool in Bulacan</title>
+    <meta name="description" content="Book the whole Villa Aurora private resort in Malolos, Bulacan: 3 AC rooms, 2 pools, up to 22 overnight guests. Overnight stays, day tours and wedding prep near Barasoain Church." />
     <meta name="author" content="Villa Aurora Malolos" />
-    <meta name="keywords" content="Villa Aurora Malolos, private resort Malolos, resort Bulacan, overnight stay, day tour, swimming pool, family getaway, events venue, Barasoain Church, accommodation" />
+    <meta name="theme-color" content="#5C3D2E" />
+    <link rel="canonical" href="https://villa-aurora-malolos.vercel.app/" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Social preview (Facebook, Messenger, X) -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Villa Aurora Malolos - Luxury Private Resort | Book Your Perfect Stay" />
-    <meta property="og:description" content="Premium private resort in Malolos, Bulacan. Perfect for family getaways and events. 3 AC rooms, swimming pools, up to 22 guests. Book your luxurious haven today!" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-    <meta property="og:url" content="https://villa-aurora-malolos.lovable.app" />
-
-    <!-- Twitter -->
+    <meta property="og:site_name" content="Villa Aurora Malolos" />
+    <meta property="og:locale" content="en_PH" />
+    <meta property="og:title" content="Villa Aurora Malolos | Private Resort with Pool in Bulacan" />
+    <meta property="og:description" content="The whole resort is yours: 3 AC rooms, 2 pools, up to 22 overnight guests, minutes from Barasoain Church. Check dates and request to book online." />
+    <meta property="og:url" content="https://villa-aurora-malolos.vercel.app/" />
+    <meta property="og:image" content="https://villa-aurora-malolos.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Villa Aurora private resort in Malolos, Bulacan" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Villa Aurora Malolos - Luxury Private Resort" />
-    <meta name="twitter:description" content="Premium private resort in Malolos, Bulacan. Perfect for family getaways and events." />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:title" content="Villa Aurora Malolos | Private Resort with Pool" />
+    <meta name="twitter:description" content="3 AC rooms, 2 pools, up to 22 overnight guests near Barasoain Church." />
+    <meta name="twitter:image" content="https://villa-aurora-malolos.vercel.app/og-image.jpg" />
 
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/fonts/Cheetah-Kick.otf" as="font" type="font/otf" crossorigin>
+    <!-- Start downloading the hero photo right away (it's the biggest thing on screen) -->
+    <link rel="preload" as="image" fetchpriority="high" href="/images/villa-exterior-1024.webp" imagesrcset="/images/villa-exterior-640.webp 640w, /images/villa-exterior-1024.webp 1024w, /images/villa-exterior-1600.webp 1600w" imagesizes="100vw">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Structured Data for Local Business -->
+    <!-- Business details for Google -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Resort",
       "name": "Villa Aurora Malolos",
-      "description": "Premium private resort in Malolos, Bulacan offering overnight stays and day tours",
+      "description": "Private resort in Malolos, Bulacan offering overnight stays, day tours and wedding preparation.",
+      "image": "https://villa-aurora-malolos.vercel.app/og-image.jpg",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "#80 Independencia St., San Gabriel",
         "addressLocality": "Malolos",
         "addressRegion": "Bulacan",
         "postalCode": "3000",
-        "addressCountry": "Philippines"
+        "addressCountry": "PH"
       },
-      "telephone": "(0953) 357 2419",
-      "url": "https://villa-aurora-malolos.lovable.app",
+      "telephone": "+63 906 233 6008",
+      "email": "villaauroramalolos@gmail.com",
+      "url": "https://villa-aurora-malolos.vercel.app/",
+      "sameAs": ["https://www.facebook.com/villaaurora.malolos"],
       "priceRange": "₱10,000 - ₱20,000",
+      "checkinTime": "14:00",
+      "checkoutTime": "12:00",
+      "petsAllowed": true,
       "amenityFeature": [
-        "Swimming Pool",
-        "Air Conditioning",
-        "WiFi",
-        "Parking",
-        "Kitchen",
-        "BBQ Facilities"
+        { "@type": "LocationFeatureSpecification", "name": "Swimming Pool", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Parking", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Kitchen", "value": true }
       ]
     }
     </script>
   </head>
 
   <body>
+    <noscript>Please turn on JavaScript to view Villa Aurora Malolos, or message us at https://m.me/villaaurora.malolos</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -3,10 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Users, Camera, MapPin, MessageCircle, Check } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import { messengerLink, startBooking } from "@/lib/booking";
-import roomFamily from "@/assets/room-family.jpg";
-import outdoorSpace from "@/assets/outdoor-space.jpg";
-import loungeArea from "@/assets/lounge-area.jpg";
-import diningArea from "@/assets/dining-area.jpg";
+import { photo } from "@/lib/photos";
 
 const features = [
   {
@@ -24,10 +21,10 @@ const features = [
 ];
 
 const photos = [
-  { src: roomFamily, alt: "Bright bedroom for getting ready" },
-  { src: outdoorSpace, alt: "Wooden veranda for portraits" },
-  { src: loungeArea, alt: "Brick entrance and stairs" },
-  { src: diningArea, alt: "Covered patio beside the pool" },
+  { ...photo("room-family", "(min-width: 768px) 25vw, 50vw"), alt: "Bright bedroom for getting ready" },
+  { ...photo("outdoor-space", "(min-width: 768px) 25vw, 50vw"), alt: "Wooden veranda for portraits" },
+  { ...photo("lounge-area", "(min-width: 768px) 25vw, 50vw"), alt: "Brick entrance and stairs" },
+  { ...photo("dining-area", "(min-width: 768px) 25vw, 50vw"), alt: "Covered patio beside the pool" },
 ];
 
 const Weddings = () => {
@@ -43,7 +40,7 @@ const Weddings = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-6xl mx-auto mb-10">
           {photos.map((p) => (
             <div key={p.alt} className="aspect-[4/5] overflow-hidden rounded-lg bg-muted">
-              <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              <img src={p.src} srcSet={p.srcSet} sizes={p.sizes} alt={p.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
             </div>
           ))}
         </div>
@@ -80,7 +77,7 @@ const Weddings = () => {
             Minutes from Barasoain Church
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="xl" className="px-8 bg-villa-gold text-villa-dark-brown hover:bg-villa-gold/90 font-semibold" onClick={() => startBooking({ packageType: "wedding" })}>
+            <Button size="xl" className="px-8 bg-white text-villa-dark-brown hover:bg-white/90 font-semibold" onClick={() => startBooking({ packageType: "wedding" })}>
               <Heart />
               Request a Wedding Booking
             </Button>

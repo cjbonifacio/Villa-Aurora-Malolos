@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, CalendarCheck } from "lucide-react";
-import logo from "@/assets/villa-aurora-logo.png";
+import logo from "@/assets/villa-aurora-logo.webp";
 import { CONTACT, scrollToSection, startBooking } from "@/lib/booking";
 
 const LINKS = [

@@ -44,7 +44,7 @@ const Inclusions = ({ items, excluded }: { items: string[]; excluded?: string[] 
       </li>
     ))}
     {excluded?.map((item) => (
-      <li key={item} className="flex gap-2 text-foreground/60">
+      <li key={item} className="flex gap-2 text-foreground/70">
         <X className="w-5 h-5 shrink-0" aria-hidden="true" />
         {item}
       </li>
@@ -120,7 +120,7 @@ const Packages = () => {
               <div className="text-center p-5 rounded-lg border border-villa-gold/60 bg-villa-gold/10">
                 <div className="text-4xl font-bold text-villa-dark-brown mb-1">₱15,000</div>
                 <div>Up to 50 guests</div>
-                <div className="text-sm text-foreground/60 mt-1">Pool limited to 22 swimmers</div>
+                <div className="text-sm text-foreground/70 mt-1">Pool limited to 22 swimmers</div>
               </div>
 
               <div>

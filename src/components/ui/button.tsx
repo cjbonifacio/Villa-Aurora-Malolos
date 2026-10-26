@@ -22,7 +22,7 @@ const buttonVariants = cva(
         // Glass button for use on top of photos
         luxury: "bg-white/10 backdrop-blur-sm text-white border border-white/50 hover:bg-white/20",
         // Facebook Messenger blue, so guests recognise it instantly
-        messenger: "bg-[#0084FF] text-white shadow-elegant hover:bg-[#0073E0] text-base font-semibold",
+        messenger: "bg-[#0866FF] text-white shadow-elegant hover:bg-[#0757D6] text-base font-semibold",
       },
       size: {
         default: "h-9 px-4 py-2",

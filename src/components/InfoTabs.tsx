@@ -9,15 +9,7 @@ import {
 } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import { CONTACT } from "@/lib/booking";
-import aerialView from "@/assets/aerial-view.jpg";
-import villaExterior from "@/assets/villa-exterior.jpg";
-import poolArea from "@/assets/pool-area.jpg";
-import diningArea from "@/assets/dining-area.jpg";
-import outdoorSpace from "@/assets/outdoor-space.jpg";
-import loungeArea from "@/assets/lounge-area.jpg";
-import roomSimple from "@/assets/room-simple.jpg";
-import roomFamily from "@/assets/room-family.jpg";
-import roomBunk from "@/assets/room-bunk.jpg";
+import { photo, largePhoto, type PhotoName } from "@/lib/photos";
 
 const amenityCategories = [
   {
@@ -63,16 +55,16 @@ const amenityCategories = [
 ];
 
 const photos = [
-  { src: aerialView, alt: "Aerial view of the house, courtyard and pool" },
-  { src: villaExterior, alt: "Front of the villa with wooden veranda and stairs" },
-  { src: poolArea, alt: "Pool with tiled waterfall wall" },
-  { src: diningArea, alt: "Covered patio beside the pool" },
-  { src: outdoorSpace, alt: "Wooden veranda with the Villa Aurora sign" },
-  { src: loungeArea, alt: "Brick entrance and stairs up to the balcony" },
-  { src: roomSimple, alt: "Room 1 with queen bed and capiz window" },
-  { src: roomFamily, alt: "Room 2 with queen bed and double deck" },
-  { src: roomBunk, alt: "Room 3 with three double-deck beds" },
-];
+  { name: "aerial-view", alt: "Aerial view of the house, courtyard and pool" },
+  { name: "villa-exterior", alt: "Front of the villa with wooden veranda and stairs" },
+  { name: "pool-area", alt: "Pool with tiled waterfall wall" },
+  { name: "dining-area", alt: "Covered patio beside the pool" },
+  { name: "outdoor-space", alt: "Wooden veranda with the Villa Aurora sign" },
+  { name: "lounge-area", alt: "Brick entrance and stairs up to the balcony" },
+  { name: "room-simple", alt: "Room 1 with queen bed and capiz window" },
+  { name: "room-family", alt: "Room 2 with queen bed and double deck" },
+  { name: "room-bunk", alt: "Room 3 with three double-deck beds" },
+].map((p) => ({ ...p, ...photo(p.name as PhotoName, "(min-width: 768px) 33vw, 50vw"), large: largePhoto(p.name as PhotoName) }));
 
 const policies = [
   {
@@ -154,6 +146,8 @@ const Gallery = () => {
           >
             <img
               src={photo.src}
+              srcSet={photo.srcSet}
+              sizes={i === 0 ? "(min-width: 768px) 66vw, 100vw" : photo.sizes}
               alt={photo.alt}
               loading="lazy"
               decoding="async"
@@ -169,7 +163,7 @@ const Gallery = () => {
             <>
               <DialogTitle className="sr-only">Photo {open + 1} of {photos.length}</DialogTitle>
               <DialogDescription className="sr-only">{photos[open].alt}</DialogDescription>
-              <img src={photos[open].src} alt={photos[open].alt} className="w-full max-h-[80vh] object-contain rounded" />
+              <img src={photos[open].large} alt={photos[open].alt} className="w-full max-h-[80vh] object-contain rounded" />
               <div className="flex items-center justify-between gap-2 pt-2">
                 <Button variant="ghost" size="icon" className="h-11 w-11 text-white hover:bg-white/10 hover:text-white" onClick={() => show(open - 1)} aria-label="Previous photo">
                   <ChevronLeft className="!size-6" />
@@ -236,7 +230,7 @@ const InfoTabs = () => {
                 </Card>
               ))}
               <Card className="border-0 shadow-elegant overflow-hidden">
-                <img src={poolArea} alt="The pool at Villa Aurora" loading="lazy" className="h-full w-full object-cover min-h-48" />
+                <img {...photo("pool-area", "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw")} alt="The pool at Villa Aurora" loading="lazy" className="h-full w-full object-cover min-h-48" />
               </Card>
             </div>
           </TabsContent>

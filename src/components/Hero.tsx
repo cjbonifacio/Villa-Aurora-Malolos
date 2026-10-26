@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, CalendarDays, MapPin, Users } from "lucide-react";
-import heroImage from "@/assets/villa-exterior.jpg";
+import { photo } from "@/lib/photos";
+
+const hero = photo("villa-exterior");
 import { scrollToSection, startBooking } from "@/lib/booking";
 
 const STATS = [
@@ -14,7 +16,9 @@ const Hero = () => {
   return (
     <section id="home" className="relative min-h-[calc(100svh-4rem)] flex items-center overflow-hidden">
       <img
-        src={heroImage}
+        src={hero.src}
+        srcSet={hero.srcSet}
+        sizes={hero.sizes}
         alt="Villa Aurora's Filipino-style house, veranda and courtyard"
         className="absolute inset-0 h-full w-full object-cover"
       />
@@ -27,7 +31,7 @@ const Hero = () => {
             Private Resort · Malolos, Bulacan
           </p>
 
-          <h1 className="text-6xl md:text-8xl font-cheetah title-outline leading-none mb-4">Villa Aurora</h1>
+          <h1 className="text-6xl md:text-8xl font-cheetah title-on-dark leading-none mb-4">Villa Aurora</h1>
           <p className="text-2xl md:text-3xl font-light text-white mb-6">Your luxurious haven</p>
 
           <p className="text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
@@ -49,7 +53,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-3">
             <Button variant="hero" size="xl" className="px-8" onClick={() => startBooking()}>
               <CalendarCheck />
-              Book Your Stay
+              Book Now
             </Button>
             <Button variant="luxury" size="xl" className="px-8" onClick={() => scrollToSection("#availability")}>
               <CalendarDays />

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock, Facebook, MessageCircle, CheckCircle2, Loader2, Copy, Navigation } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import { CONTACT, PACKAGE_LABELS, messengerLink, onStartBooking } from "@/lib/booking";
+import { useConsent } from "@/lib/consent";
 
 // Client-side check for quick feedback. The server (/api/request) validates again.
 const formSchema = z
@@ -73,6 +74,9 @@ const EnhancedContact = () => {
   const [sentMessage, setSentMessage] = useState("");
   const [copied, setCopied] = useState(false);
   const nameRef = useRef<HTMLInputElement>(null);
+  const consent = useConsent();
+  const [mapRequested, setMapRequested] = useState(false);
+  const showMap = consent === "accepted" || mapRequested;
 
   const isDayTour = form.package_type === "daytour";
   const today = format(new Date(), "yyyy-MM-dd");
@@ -297,7 +301,7 @@ const EnhancedContact = () => {
                       </>
                     )}
                   </Button>
-                  <p className="text-xs text-foreground/60 text-center">
+                  <p className="text-xs text-foreground/70 text-center">
                     Opens Facebook Messenger with your details filled in. Just tap Send.
                   </p>
                 </form>
@@ -313,16 +317,16 @@ const EnhancedContact = () => {
               </CardHeader>
               <CardContent className="space-y-1">
                 <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-md p-2 -mx-2 min-h-11 hover:bg-muted transition-colors">
-                  <MessageCircle className="h-5 w-5 text-[#0084FF] shrink-0" />
+                  <MessageCircle className="h-5 w-5 text-[#0866FF] shrink-0" />
                   <span>Message us on Messenger</span>
                 </a>
                 <a href={`tel:${CONTACT.phone}`} className="flex items-center gap-3 rounded-md p-2 -mx-2 min-h-11 hover:bg-muted transition-colors">
                   <Phone className="h-5 w-5 text-secondary shrink-0" />
-                  <span>{CONTACT.phoneLabel} <span className="text-foreground/60 text-sm">(bookings)</span></span>
+                  <span>{CONTACT.phoneLabel} <span className="text-foreground/70 text-sm">(bookings)</span></span>
                 </a>
                 <a href={`tel:${CONTACT.caretakerPhone}`} className="flex items-center gap-3 rounded-md p-2 -mx-2 min-h-11 hover:bg-muted transition-colors">
                   <Phone className="h-5 w-5 text-secondary shrink-0" />
-                  <span>{CONTACT.caretakerPhoneLabel} <span className="text-foreground/60 text-sm">({CONTACT.caretakers}, on-site)</span></span>
+                  <span>{CONTACT.caretakerPhoneLabel} <span className="text-foreground/70 text-sm">({CONTACT.caretakers}, on-site)</span></span>
                 </a>
                 <a href={`mailto:${CONTACT.email}`} className="flex items-center gap-3 rounded-md p-2 -mx-2 min-h-11 hover:bg-muted transition-colors break-all">
                   <Mail className="h-5 w-5 text-secondary shrink-0" />
@@ -389,16 +393,34 @@ const EnhancedContact = () => {
 
         {/* Map */}
         <div className="mt-12 max-w-6xl mx-auto rounded-xl overflow-hidden shadow-elegant aspect-[4/3] sm:aspect-[16/7] bg-muted">
-          <iframe
-            src={`https://www.google.com/maps?q=${encodeURIComponent("Villa Aurora, Independencia St, Malolos, Bulacan")}&output=embed`}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Map to Villa Aurora Malolos"
-          />
+          {showMap ? (
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent("Villa Aurora Resort, Independencia St, Malolos, Bulacan")}&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Map to Villa Aurora Malolos"
+            />
+          ) : (
+            // Google Maps sets cookies, so it only loads after the visitor agrees.
+            <div className="h-full flex flex-col items-center justify-center gap-3 p-6 text-center">
+              <MapPin className="h-8 w-8 text-secondary" aria-hidden="true" />
+              <p className="text-foreground/75 max-w-sm">The map is from Google Maps, which uses cookies.</p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button variant="hero" size="lg" onClick={() => setMapRequested(true)}>
+                  Show map
+                </Button>
+                <Button variant="outline" size="lg" asChild>
+                  <a href={CONTACT.mapsUrl} target="_blank" rel="noopener noreferrer">
+                    Open in Google Maps
+                  </a>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

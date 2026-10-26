@@ -21,7 +21,7 @@ h1, h2 {
   font-family: 'Cheetah Kick', cursive;
   font-weight: 400;
   line-height: 1.2;
-  color: #D4A574;
+  color: #8F6230; /* deep gold: readable on cream (4.7:1) */
 }
 
 h3, h4 {
@@ -243,8 +243,12 @@ button, .btn {
     @apply bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent;
   }
 
-  /* Title outline effect (legacy - kept simple) */
+  /* Gold titles. Deep gold on light backgrounds, bright gold on dark ones (both pass contrast). */
   .title-outline {
+    color: #8F6230;
+  }
+
+  .title-on-dark {
     color: #D4A574;
   }
 
