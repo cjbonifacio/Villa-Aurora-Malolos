@@ -2,13 +2,83 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Phone, Mail, MapPin, Clock, Facebook } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Facebook, CheckCircle2, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { addDays, format, parseISO } from "date-fns";
+import { z } from "zod";
+
+const MESSENGER_URL = "https://m.me/villaaurora.malolos";
+
+// Client-side check. The server (/api/request) validates again — this is just for quick feedback.
+const formSchema = z
+  .object({
+    guest_name: z.string().trim().min(2, "Please enter your full name"),
+    phone: z.string().trim().regex(/^[0-9+()\-\s]{7,30}$/, "Please enter a valid phone number"),
+    email: z.string().trim().email("Please enter a valid email"),
+    check_in: z.string().min(1, "Please pick a check-in date"),
+    check_out: z.string().min(1, "Please pick a check-out date"),
+    pax: z.coerce.number().int().min(1, "At least 1 guest").max(22, "Maximum of 22 guests"),
+    package_type: z.string(),
+    message: z.string().max(500, "Message is too long (max 500 characters)"),
+    website: z.string(),
+  })
+  .refine((f) => f.check_out > f.check_in, { message: "Check-out must be after check-in", path: ["check_out"] });
+
+const emptyForm = {
+  guest_name: "",
+  phone: "",
+  email: "",
+  check_in: "",
+  check_out: "",
+  pax: "",
+  package_type: "",
+  message: "",
+  website: "", // honeypot (hidden)
+};
 
 const EnhancedContact = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [form, setForm] = useState(emptyForm);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const isDayTour = form.package_type === "daytour";
+  const today = format(new Date(), "yyyy-MM-dd");
+
+  const update = (field: keyof typeof emptyForm) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => setForm((f) => ({ ...f, [field]: e.target.value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted");
+    setError(null);
+
+    // A day tour uses one day, so check-out is simply the next day.
+    const payload = {
+      ...form,
+      check_out: isDayTour && form.check_in ? format(addDays(parseISO(form.check_in), 1), "yyyy-MM-dd") : form.check_out,
+    };
+
+    const parsed = formSchema.safeParse(payload);
+    if (!parsed.success) {
+      setError(parsed.error.errors[0].message);
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not send your request.");
+      setStatus("sent");
+      setForm(emptyForm);
+    } catch (err) {
+      setStatus("idle");
+      setError(err instanceof Error ? err.message : "Could not send your request.");
+    }
   };
 
   return (
@@ -62,7 +132,7 @@ const EnhancedContact = () => {
               </CardHeader>
               <CardContent>
                 <Button variant="outline" asChild>
-                  <a href="https://www.google.com/search?q=Facebook.com/VillaAurora.Malolos" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.facebook.com/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
                     Visit our Facebook Page
                   </a>
                 </Button>
@@ -150,41 +220,68 @@ const EnhancedContact = () => {
           <div>
             <Card className="shadow-elegant border-0">
               <CardHeader>
-                <CardTitle>Send us a Message</CardTitle>
+                <CardTitle>Request a Booking</CardTitle>
                 <p className="text-muted-foreground">We'd love to help plan your perfect stay</p>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                {status === "sent" ? (
+                  <div className="text-center space-y-4 py-8">
+                    <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto" />
+                    <h3 className="text-xl font-semibold">Request received!</h3>
+                    <p className="text-muted-foreground">
+                      This is a booking <strong>request</strong>, not a confirmed booking yet. We'll check your dates
+                      and contact you to confirm and arrange the downpayment.
+                    </p>
+                    <p className="text-muted-foreground">For a faster reply, message us on Facebook Messenger.</p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-3">
+                      <Button variant="booking" asChild>
+                        <a href={MESSENGER_URL} target="_blank" rel="noopener noreferrer">
+                          Message us on Messenger
+                        </a>
+                      </Button>
+                      <Button variant="outline" onClick={() => setStatus("idle")}>
+                        Send another request
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                  {/* Honeypot: hidden from people, bots fill it in */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={form.website}
+                    onChange={update("website")}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="hidden"
+                  />
+
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Full Name *</label>
-                      <Input placeholder="Your full name" required />
+                      <label htmlFor="guest_name" className="block text-sm font-medium mb-2">Full Name *</label>
+                      <Input id="guest_name" placeholder="Your full name" value={form.guest_name} onChange={update("guest_name")} required />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Phone Number *</label>
-                      <Input placeholder="+63 XXX XXX XXXX" required />
+                      <label htmlFor="phone" className="block text-sm font-medium mb-2">Phone Number *</label>
+                      <Input id="phone" type="tel" placeholder="+63 XXX XXX XXXX" value={form.phone} onChange={update("phone")} required />
                     </div>
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">Email Address *</label>
-                    <Input type="email" placeholder="your.email@example.com" required />
+                    <label htmlFor="email" className="block text-sm font-medium mb-2">Email Address *</label>
+                    <Input id="email" type="email" placeholder="your.email@example.com" value={form.email} onChange={update("email")} required />
                   </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Preferred Dates</label>
-                      <Input type="date" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Number of Guests</label>
-                      <Input type="number" placeholder="How many guests?" min="1" max="22" />
-                    </div>
-                  </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">Package Interest</label>
-                    <select className="w-full p-2 border border-input rounded-md bg-background">
+                    <label htmlFor="package_type" className="block text-sm font-medium mb-2">Package Interest</label>
+                    <select
+                      id="package_type"
+                      value={form.package_type}
+                      onChange={update("package_type")}
+                      className="w-full p-2 border border-input rounded-md bg-background"
+                    >
                       <option value="">Select a package</option>
                       <option value="overnight">Overnight Stay</option>
                       <option value="daytour">Day Tour</option>
@@ -192,23 +289,68 @@ const EnhancedContact = () => {
                       <option value="other">Other Event</option>
                     </select>
                   </div>
-                  
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="check_in" className="block text-sm font-medium mb-2">
+                        {isDayTour ? "Date *" : "Check-in Date *"}
+                      </label>
+                      <Input id="check_in" type="date" min={today} value={form.check_in} onChange={update("check_in")} required />
+                    </div>
+                    {!isDayTour && (
+                      <div>
+                        <label htmlFor="check_out" className="block text-sm font-medium mb-2">Check-out Date *</label>
+                        <Input
+                          id="check_out"
+                          type="date"
+                          min={form.check_in || today}
+                          value={form.check_out}
+                          onChange={update("check_out")}
+                          required
+                        />
+                      </div>
+                    )}
+                  </div>
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">Message & Special Requirements</label>
-                    <Textarea 
+                    <label htmlFor="pax" className="block text-sm font-medium mb-2">Number of Guests *</label>
+                    <Input id="pax" type="number" placeholder="How many guests?" min="1" max="22" value={form.pax} onChange={update("pax")} required />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium mb-2">Message & Special Requirements</label>
+                    <Textarea
+                      id="message"
                       placeholder="Tell us about your event, special requirements, dietary restrictions, or any questions you have..."
                       className="min-h-[120px]"
+                      maxLength={500}
+                      value={form.message}
+                      onChange={update("message")}
                     />
                   </div>
-                  
-                  <Button type="submit" variant="booking" className="w-full">
-                    Send Inquiry
+
+                  {error && (
+                    <p role="alert" className="text-sm text-red-600 text-center">
+                      {error}
+                    </p>
+                  )}
+
+                  <Button type="submit" variant="booking" className="w-full" disabled={status === "sending"}>
+                    {status === "sending" ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      "Send Booking Request"
+                    )}
                   </Button>
-                  
+
                   <p className="text-xs text-muted-foreground text-center">
-                    By submitting this form, you agree to our Privacy Policy and Terms of Service
+                    This sends a request only. Your booking is confirmed once we contact you and receive the downpayment.
                   </p>
                 </form>
+                )}
               </CardContent>
             </Card>
           </div>

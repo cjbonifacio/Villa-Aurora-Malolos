@@ -1,120 +1,97 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { addMonths, subMonths, format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from "date-fns";
+import {
+  addMonths,
+  subMonths,
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameDay,
+  startOfDay,
+  isBefore,
+} from "date-fns";
 
-interface BookedDate {
-  date: string;
+interface BookedRange {
+  check_in: string; // YYYY-MM-DD
+  check_out: string; // YYYY-MM-DD, exclusive
+}
+
+// Loads booked ranges for one month from our /api/availability function.
+async function fetchMonth(month: Date): Promise<BookedRange[]> {
+  const from = format(startOfMonth(month), "yyyy-MM-dd");
+  const to = format(addMonths(startOfMonth(month), 1), "yyyy-MM-dd");
+  const res = await fetch(`/api/availability?from=${from}&to=${to}`);
+  if (!res.ok) throw new Error(`Availability request failed (${res.status})`);
+  const data = await res.json();
+  return data.ranges ?? [];
 }
 
 const AvailabilityCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-  const [bookedDates, setBookedDates] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const monthKey = format(currentMonth, "yyyy-MM");
+  const { data: ranges = [], isLoading, isError, refetch } = useQuery({
+    queryKey: ["availability", monthKey],
+    queryFn: () => fetchMonth(currentMonth),
+    staleTime: 5 * 60 * 1000,
+  });
 
   const monthStart = startOfMonth(currentMonth);
-  const monthEnd = endOfMonth(currentMonth);
-  const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
-
+  const daysInMonth = eachDayOfInterval({ start: monthStart, end: endOfMonth(currentMonth) });
   const weekDays = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
-  // Get the starting day of the week for the month
   const startDayOfWeek = monthStart.getDay();
+  const today = startOfDay(new Date());
 
-  // Fetch booked dates from Google Calendar
-  useEffect(() => {
-    const fetchCalendarData = async () => {
-      setIsLoading(true);
-      setError(null);
-      
-      try {
-        // This would be your backend API endpoint that fetches from Google Calendar
-        // For now, using mock data - you'll need to implement the backend API
-        
-        // Example backend implementation would be:
-        // const response = await fetch('/api/calendar');
-        // const data = await response.json();
-        // setBookedDates(data.bookedDates);
-        
-        // Mock data for demonstration
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const mockBookedDates = [
-          "2025-11-16",
-          "2025-11-21",
-          "2025-11-22",
-          "2025-11-23",
-          "2025-11-30",
-        ];
-        
-        setBookedDates(mockBookedDates);
-      } catch (err) {
-        setError("Failed to load calendar data. Please try again later.");
-        console.error("Calendar fetch error:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCalendarData();
-  }, [currentMonth]);
-
-  // Check if a date is booked
+  // A night is booked if check_in <= day < check_out. The check-out day stays open.
   const isBooked = (date: Date) => {
-    const dateString = format(date, "yyyy-MM-dd");
-    return bookedDates.includes(dateString);
+    const day = format(date, "yyyy-MM-dd");
+    return ranges.some((r) => r.check_in <= day && day < r.check_out);
   };
+  const isPast = (date: Date) => isBefore(date, today);
 
-  // Get date status color
   const getDateColor = (date: Date) => {
-    if (isBooked(date)) {
-      return "bg-red-500 hover:bg-red-600 text-white border-red-600";
-    }
+    if (isPast(date)) return "bg-muted text-muted-foreground border-muted cursor-default";
+    if (isBooked(date)) return "bg-red-500 hover:bg-red-600 text-white border-red-600";
     return "bg-green-500 hover:bg-green-600 text-white border-green-600";
   };
 
   const getDateStatus = (date: Date) => {
-    if (isBooked(date)) {
-      return "Fully Booked";
-    }
+    if (isPast(date)) return "Past date";
+    if (isBooked(date)) return "Booked";
     return "Available";
   };
 
-  const previousMonth = () => {
-    setCurrentMonth(subMonths(currentMonth, 1));
-  };
-
-  const nextMonth = () => {
-    setCurrentMonth(addMonths(currentMonth, 1));
-  };
+  // Don't let visitors page back before the current month.
+  const canGoBack = startOfMonth(currentMonth) > startOfMonth(today);
 
   return (
     <div className="max-w-7xl mx-auto">
       <Card className="shadow-elegant">
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           {/* Calendar Header */}
           <div className="flex items-center justify-between mb-6">
             <Button
               variant="outline"
               size="icon"
-              onClick={previousMonth}
+              onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
               className="h-10 w-10"
-              disabled={isLoading}
+              disabled={!canGoBack}
+              aria-label="Previous month"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h3 className="text-2xl font-bold">
-              {format(currentMonth, "MMMM yyyy")}
-            </h3>
+            <h3 className="text-2xl font-bold">{format(currentMonth, "MMMM yyyy")}</h3>
             <Button
               variant="outline"
               size="icon"
-              onClick={nextMonth}
+              onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
               className="h-10 w-10"
-              disabled={isLoading}
+              aria-label="Next month"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
@@ -129,41 +106,40 @@ const AvailabilityCalendar = () => {
           )}
 
           {/* Error State */}
-          {error && !isLoading && (
+          {isError && !isLoading && (
             <div className="text-center py-12">
-              <p className="text-red-500 mb-4">{error}</p>
-              <Button onClick={() => window.location.reload()}>Retry</Button>
+              <p className="text-red-500 mb-4">
+                We couldn't load the calendar right now. Please try again, or message us on Facebook to check your dates.
+              </p>
+              <div className="flex justify-center gap-3">
+                <Button onClick={() => refetch()}>Retry</Button>
+                <Button variant="outline" asChild>
+                  <a href="https://m.me/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
+                    Message us
+                  </a>
+                </Button>
+              </div>
             </div>
           )}
 
           {/* Calendar Grid */}
-          {!isLoading && !error && (
+          {!isLoading && !isError && (
             <>
-              {/* Weekday Headers */}
-              <div className="grid grid-cols-7 gap-2 mb-4">
+              <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
                 {weekDays.map((day) => (
-                  <div
-                    key={day}
-                    className="text-center font-semibold text-sm text-muted-foreground p-2"
-                  >
+                  <div key={day} className="text-center font-semibold text-sm text-muted-foreground p-2">
                     {day}
                   </div>
                 ))}
               </div>
 
-              {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-2">
-                {/* Empty cells for days before month starts */}
+              <div className="grid grid-cols-7 gap-1 sm:gap-2">
                 {Array.from({ length: startDayOfWeek }).map((_, index) => (
                   <div key={`empty-${index}`} className="aspect-square" />
                 ))}
 
-                {/* Actual days */}
                 {daysInMonth.map((date) => {
-                  const dateColor = getDateColor(date);
-                  const dateStatus = getDateStatus(date);
                   const isHovered = hoveredDate && isSameDay(hoveredDate, date);
-
                   return (
                     <div
                       key={date.toISOString()}
@@ -172,16 +148,17 @@ const AvailabilityCalendar = () => {
                       onMouseLeave={() => setHoveredDate(null)}
                     >
                       <button
-                        className={`w-full h-full rounded-full border-2 font-semibold transition-all duration-200 hover:scale-110 ${dateColor}`}
+                        type="button"
+                        aria-label={`${format(date, "MMMM d, yyyy")}: ${getDateStatus(date)}`}
+                        className={`w-full h-full rounded-full border-2 font-semibold transition-all duration-200 hover:scale-110 ${getDateColor(date)}`}
                       >
                         {format(date, "d")}
                       </button>
 
-                      {/* Tooltip on hover */}
                       {isHovered && (
                         <div className="absolute z-10 top-full mt-2 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-3 py-2 rounded-md shadow-lg border whitespace-nowrap text-sm">
                           <div className="font-semibold">{format(date, "MMMM d, yyyy")}</div>
-                          <div className="text-xs">{dateStatus}</div>
+                          <div className="text-xs">{getDateStatus(date)}</div>
                           <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-popover rotate-45 border-l border-t"></div>
                         </div>
                       )}
@@ -204,12 +181,6 @@ const AvailabilityCalendar = () => {
                   </div>
                   <span className="text-sm font-medium">Booked</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-yellow-500 border-2 border-yellow-600 flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">07</span>
-                  </div>
-                  <span className="text-sm font-medium">Partially Available</span>
-                </div>
               </div>
 
               {/* Info Box */}
@@ -217,92 +188,18 @@ const AvailabilityCalendar = () => {
                 <h4 className="font-semibold mb-2 text-center">💡 Booking Information</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• Green dates are available for booking</li>
-                  <li>• Red dates are fully booked</li>
-                  <li>• Yellow dates have partial availability (contact us for details)</li>
+                  <li>• Red dates are already booked</li>
+                  <li>• Check-out day is open for the next guest's check-in</li>
                   <li>• Weekend rates apply for Friday-Saturday bookings</li>
                   <li>• 50% downpayment required to secure your reservation</li>
                 </ul>
-              </div>
-
-              {/* Google Calendar Integration Note */}
-              <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Calendar synced with our booking system
-                </p>
-                <Button 
-                  variant="link" 
-                  className="text-xs" 
-                  asChild
-                >
-                  <a 
-                    href="https://calendar.google.com/calendar/ical/villaauroramalolos%40gmail.com/public/basic.ics" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
-                    Subscribe to Google Calendar
-                  </a>
-                </Button>
               </div>
             </>
           )}
         </CardContent>
       </Card>
-
-      {/* Backend API Implementation Note */}
-      <div className="mt-6 p-4 bg-muted/50 rounded-lg text-sm">
-        <h4 className="font-semibold mb-2">📝 Backend Implementation Required</h4>
-        <p className="text-muted-foreground mb-2">
-          To enable live Google Calendar integration, create a backend API endpoint at <code className="bg-background px-1 rounded">/api/calendar</code> that:
-        </p>
-        <ol className="text-muted-foreground space-y-1 ml-4 list-decimal">
-          <li>Fetches data from: <code className="bg-background px-1 rounded text-xs break-all">https://calendar.google.com/calendar/ical/villaauroramalolos%40gmail.com/public/basic.ics</code></li>
-          <li>Parses the iCal format using a library like <code className="bg-background px-1 rounded">node-ical</code></li>
-          <li>Extracts booked dates and returns them as JSON: <code className="bg-background px-1 rounded">{`{ "bookedDates": ["2025-11-20", "2025-11-22"] }`}</code></li>
-          <li>Ensures privacy: Only return availability status, never guest names or event details</li>
-        </ol>
-      </div>
     </div>
   );
 };
 
 export default AvailabilityCalendar;
-
-/*
-BACKEND API IMPLEMENTATION EXAMPLE (Vercel/Next.js):
-
-Create a file: pages/api/calendar.ts
-
-import type { NextApiRequest, NextApiResponse } from 'next';
-import ical from 'node-ical';
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  try {
-    const calendarUrl = 'https://calendar.google.com/calendar/ical/villaauroramalolos%40gmail.com/public/basic.ics';
-    
-    // Fetch and parse iCal data
-    const events = await ical.async.fromURL(calendarUrl);
-    
-    // Extract booked dates
-    const bookedDates: string[] = [];
-    
-    for (const event of Object.values(events)) {
-      if (event.type === 'VEVENT') {
-        const startDate = new Date(event.start);
-        const formattedDate = startDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-        bookedDates.push(formattedDate);
-      }
-    }
-    
-    // Return only the dates, not event details (privacy)
-    res.status(200).json({ bookedDates });
-  } catch (error) {
-    console.error('Calendar API error:', error);
-    res.status(500).json({ error: 'Failed to fetch calendar data' });
-  }
-}
-
-Don't forget to install: npm install node-ical
-*/
