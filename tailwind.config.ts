@@ -1,10 +1,9 @@
 import type { Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
 
+// Villa Aurora theme. The color values live in src/index.css (:root).
 export default {
-  darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
-  prefix: "",
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     container: {
       center: true,
@@ -15,18 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        'sans': ['Inter', 'sans-serif'],
-        'cheetah': ['Cheetah Kick', 'cursive'],
-      },
-      fontSize: {
-        'h1-desktop': '60px',
-        'h1-mobile': '42px',
-        'h2-desktop': '40px',
-        'h2-mobile': '28px',
-        'h3-desktop': '28px',
-        'h3-mobile': '20px',
-        'body-desktop': '16px',
-        'body-mobile': '14px',
+        sans: ["Inter", "sans-serif"],
+        cheetah: ["Cheetah Kick", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -37,7 +26,6 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -63,54 +51,19 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-        // Villa Aurora Brand Colors
-        'villa-dark-brown': 'hsl(var(--villa-dark-brown))',
-        'villa-warm-brown': 'hsl(var(--villa-warm-brown))',
-        'villa-pool-blue': 'hsl(var(--villa-pool-blue))',
-        'villa-gold': 'hsl(var(--villa-gold))',
-        'villa-forest-green': 'hsl(var(--villa-forest-green))',
-        'villa-cream': 'hsl(var(--villa-cream))',
-        'villa-beige': 'hsl(var(--villa-beige))',
-        'villa-gray': 'hsl(var(--villa-gray))',
+        // Villa Aurora brand colors
+        "villa-dark-brown": "hsl(var(--villa-dark-brown))",
+        "villa-warm-brown": "hsl(var(--villa-warm-brown))",
+        "villa-gold": "hsl(var(--villa-gold))",
+        "villa-forest-green": "hsl(var(--villa-forest-green))",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      keyframes: {
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
-        "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
     },
   },
+  // Powers the open/close animations of the photo viewer and tabs
   plugins: [animate],
 } satisfies Config;

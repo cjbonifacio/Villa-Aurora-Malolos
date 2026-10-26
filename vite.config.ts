@@ -1,7 +1,6 @@
 import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
 // Local dev only: lets `npm run dev` run the functions in /api the same way Vercel does
 // in production. Reads secrets from .env.local.
@@ -42,12 +41,12 @@ function localApi(): Plugin {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   server: {
     host: "::",
     port: 8080,
   },
-  plugins: [react(), localApi(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [react(), localApi()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

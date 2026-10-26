@@ -1,73 +1,40 @@
-# Welcome to your Lovable project
+# Villa Aurora Malolos — website
 
-## Project info
+Public website for Villa Aurora Private Resort, Malolos, Bulacan.
+Live at **https://villa-aurora-malolos.vercel.app** (deployed by Vercel from the `main` branch).
 
-**URL**: https://lovable.dev/projects/cd6acce3-ae52-4601-8c2d-2c849e177afc
+Guests can see live availability, view rates and photos, and send a booking request that opens
+Facebook Messenger. The site never confirms a booking; CJ confirms bookings in the admin app.
 
-## How can I edit this code?
+## What's where
 
-There are several ways of editing your application.
+| Path | What it is |
+|---|---|
+| `src/pages/` | Pages: home, Privacy, Terms, 404 |
+| `src/components/` | Page sections (hero, packages, calendar, booking form…) and `ui/` building blocks |
+| `src/lib/booking.ts` | Phone numbers, Facebook/Messenger links, address — change them here |
+| `src/lib/photos.ts` | Photo list (files are in `public/images/`) |
+| `api/availability.ts` | Server: booked dates from Supabase + Google Calendar (dates only, no names) |
+| `api/request.ts` | Server: checks and saves booking requests to Supabase |
+| `supabase/migrations/` | Database setup SQL |
+| `public/` | Icons, social preview image, sitemap, robots.txt, Google verification file |
+| `docs/GO_LIVE.md` | Setup guide: Supabase, Vercel settings, Google Calendar, analytics |
+| `CLAUDE.md` | Project brief for Claude Code |
 
-**Use Lovable**
+## Settings (Vercel → Settings → Environment Variables)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cd6acce3-ae52-4601-8c2d-2c849e177afc) and start prompting.
+See `.env.example`. Never commit real values.
 
-Changes made via Lovable will be committed automatically to this repo.
+- `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` — database
+- `GOOGLE_CALENDAR_ICS_URL` — your Google Calendar's secret iCal address
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Run it on your computer
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm install
+npm run dev      # http://localhost:8080 (also runs the /api functions, using .env.local)
+npm run build    # production build
+npm run lint
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/cd6acce3-ae52-4601-8c2d-2c849e177afc) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built with Vite, React, TypeScript, Tailwind CSS and shadcn/ui.
