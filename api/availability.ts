@@ -4,6 +4,21 @@
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
+// Old Supabase keys are JWTs ("eyJ...") and go in both headers. New "sb_secret_..." keys go in apikey only.
+function supabaseHeaders(key: string): Record<string, string> {
+  return key.startsWith("eyJ") ? { apikey: key, Authorization: `Bearer ${key}` } : { apikey: key };
+}
+
+// Supabase error text, e.g. "Invalid API key" (never contains the key itself).
+async function supabaseError(res: Response) {
+  const text = await res.text();
+  try {
+    return (JSON.parse(text).message as string) ?? text;
+  } catch {
+    return text.slice(0, 200);
+  }
+}
+
 function json(body: unknown, status = 200, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
@@ -12,8 +27,9 @@ function json(body: unknown, status = 200, headers: Record<string, string> = {})
 }
 
 export async function GET(request: Request) {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // trim() guards against stray spaces when the values were pasted into Vercel
+  const url = process.env.SUPABASE_URL?.trim().replace(/\/+$/, "");
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) return json({ error: "Server is not configured yet." }, 500);
 
   const params = new URL(request.url).searchParams;
@@ -28,10 +44,11 @@ export async function GET(request: Request) {
     `${url}/rest/v1/blocked_dates?select=check_in,check_out` +
     `&check_in=lt.${to}&check_out=gt.${from}&order=check_in`;
 
-  const res = await fetch(query, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
+  const res = await fetch(query, { headers: supabaseHeaders(key) });
   if (!res.ok) {
-    console.error("Supabase availability error", res.status, await res.text());
-    return json({ error: "Could not load availability." }, 502);
+    const detail = await supabaseError(res);
+    console.error("Supabase availability error", res.status, detail);
+    return json({ error: "Could not load availability.", detail }, 502);
   }
 
   const ranges = (await res.json()) as { check_in: string; check_out: string }[];

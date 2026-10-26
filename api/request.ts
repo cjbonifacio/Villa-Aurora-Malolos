@@ -32,6 +32,21 @@ function rateLimited(ip: string) {
   return recent.length > 5;
 }
 
+// Old Supabase keys are JWTs ("eyJ...") and go in both headers. New "sb_secret_..." keys go in apikey only.
+function supabaseHeaders(key: string): Record<string, string> {
+  return key.startsWith("eyJ") ? { apikey: key, Authorization: `Bearer ${key}` } : { apikey: key };
+}
+
+// Supabase error text, e.g. "Invalid API key" (never contains the key itself).
+async function supabaseError(res: Response) {
+  const text = await res.text();
+  try {
+    return (JSON.parse(text).message as string) ?? text;
+  } catch {
+    return text.slice(0, 200);
+  }
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 }
@@ -41,8 +56,9 @@ function todayInManila() {
 }
 
 export async function POST(request: Request) {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // trim() guards against stray spaces when the values were pasted into Vercel
+  const url = process.env.SUPABASE_URL?.trim().replace(/\/+$/, "");
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) return json({ error: "Server is not configured yet." }, 500);
 
   const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
@@ -66,7 +82,7 @@ export async function POST(request: Request) {
 
   if (r.check_in < todayInManila()) return json({ error: "Check-in date is in the past." }, 400);
 
-  const headers = { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
+  const headers = { ...supabaseHeaders(key), "Content-Type": "application/json" };
 
   // Server-side re-check: are any of these nights already booked?
   const overlap = await fetch(
@@ -74,7 +90,7 @@ export async function POST(request: Request) {
     { headers },
   );
   if (!overlap.ok) {
-    console.error("Supabase overlap check error", overlap.status, await overlap.text());
+    console.error("Supabase overlap check error", overlap.status, await supabaseError(overlap));
     return json({ error: "Could not check availability. Please try again." }, 502);
   }
   if (((await overlap.json()) as unknown[]).length > 0) {
@@ -97,7 +113,7 @@ export async function POST(request: Request) {
     }),
   });
   if (!insert.ok) {
-    console.error("Supabase insert error", insert.status, await insert.text());
+    console.error("Supabase insert error", insert.status, await supabaseError(insert));
     return json({ error: "Could not send your request. Please try again or message us on Facebook." }, 502);
   }
 
