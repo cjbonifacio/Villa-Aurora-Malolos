@@ -129,5 +129,7 @@ export async function GET(request: Request) {
   const fromSupabase = (await res.json()) as DateRange[];
   const ranges = [...fromSupabase, ...fromCalendar].sort((x, y) => x.check_in.localeCompare(y.check_in));
   // Cache at Vercel's edge for 5 minutes so we don't hit the database on every visit.
-  return json({ ranges }, 200, { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=60" });
+  // "calendar" says whether Google Calendar is set up (never the address itself), to help with troubleshooting.
+  const calendar = process.env.GOOGLE_CALENDAR_ICS_URL?.trim() ? "connected" : "not set";
+  return json({ ranges, calendar }, 200, { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=60" });
 }
