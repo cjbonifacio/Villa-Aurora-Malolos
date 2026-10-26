@@ -16,16 +16,18 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         // Villa Aurora Resort variants
-        hero: "gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transform hover:-translate-y-0.5 transition-bounce",
-        sunset: "gradient-sunset text-white shadow-warm hover:shadow-lg transform hover:scale-[1.02] transition-smooth",
-        ocean: "gradient-ocean text-white shadow-elegant hover:shadow-glow border-0",
-        luxury: "bg-secondary/20 backdrop-blur-sm text-secondary-foreground border border-secondary/30 hover:bg-secondary/30 hover:border-secondary/50 shadow-elegant",
-        booking: "bg-accent text-accent-foreground shadow-elegant hover:bg-accent/90 hover:shadow-glow text-base font-semibold px-8 py-3",
+        // Main call to action (dark brown)
+        hero: "bg-villa-dark-brown text-white shadow-elegant hover:bg-villa-warm-brown hover:-translate-y-0.5",
+        booking: "bg-villa-dark-brown text-white shadow-elegant hover:bg-villa-warm-brown text-base font-semibold",
+        // Glass button for use on top of photos
+        luxury: "bg-white/10 backdrop-blur-sm text-white border border-white/50 hover:bg-white/20",
+        // Facebook Messenger blue, so guests recognise it instantly
+        messenger: "bg-[#0084FF] text-white shadow-elegant hover:bg-[#0073E0] text-base font-semibold",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
+        lg: "h-11 rounded-md px-8",
         xl: "h-12 rounded-lg px-12 text-base",
         icon: "h-9 w-9",
       },

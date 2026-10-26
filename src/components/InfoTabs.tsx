@@ -1,340 +1,277 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { Waves, Bed, Wifi, Car, ChefHat, Music, Gamepad2, Utensils, Users, Droplets, Camera, Image as ImageIcon, CalendarIcon, FileText } from "lucide-react";
-import AvailabilityCalendar from "./AvailabilityCalendar";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Waves, Bed, Wifi, ChefHat, Users, Mic,
+  Image as ImageIcon, FileText, PawPrint, CalendarX, CigaretteOff, Wallet, Home, MessageCircle, ChevronLeft, ChevronRight,
+} from "lucide-react";
+import SectionHeader from "@/components/SectionHeader";
+import { CONTACT } from "@/lib/booking";
+import aerialView from "@/assets/aerial-view.jpg";
+import villaExterior from "@/assets/villa-exterior.jpg";
+import poolArea from "@/assets/pool-area.jpg";
+import diningArea from "@/assets/dining-area.jpg";
+import outdoorSpace from "@/assets/outdoor-space.jpg";
+import loungeArea from "@/assets/lounge-area.jpg";
+import roomSimple from "@/assets/room-simple.jpg";
+import roomFamily from "@/assets/room-family.jpg";
+import roomBunk from "@/assets/room-bunk.jpg";
 
-const InfoTabs = () => {
+const amenityCategories = [
+  {
+    title: "Pool Area",
+    icon: Waves,
+    items: [
+      "Private adult pool (3–5 ft)",
+      "Kiddie pool (2 ft)",
+      "2 outdoor showers",
+      "Poolside comfort room",
+    ],
+  },
+  {
+    title: "Rooms",
+    icon: Bed,
+    items: [
+      "Room 1: air-conditioned, 2 guests",
+      "Room 2: 8 guests (queen bed, double deck, pull-out)",
+      "Room 3: 12 guests (3 double decks)",
+      "22 guests maximum overnight",
+    ],
+  },
+  {
+    title: "Entertainment",
+    icon: Mic,
+    items: ["Unlimited videoke", "Billiards table", "Basic sound system", "Smart TV with YouTube"],
+  },
+  {
+    title: "Kitchen & Dining",
+    icon: ChefHat,
+    items: [
+      "Refrigerator, water dispenser, rice cooker",
+      "Induction stove with pots and pans",
+      "Microwave",
+      "8-burner BBQ griller",
+    ],
+  },
+  {
+    title: "General",
+    icon: Wifi,
+    items: ["Free unlimited fast WiFi", "Parking for 4 cars", "Tables & chairs for 22", "Event-ready setup"],
+  },
+];
 
-  const amenityCategories = [
-    {
-      title: "Pool Area",
-      description: "Refreshing aquatic facilities for all ages",
-      items: [
-        { icon: Waves, name: "Private Adult Pool", detail: "3-5 ft depth for swimming and relaxation" },
-        { icon: Waves, name: "Kiddie Pool", detail: "2 ft depth, perfect for children" },
-        { icon: Droplets, name: "Outdoor Showers", detail: "2 convenient shower areas" },
-        { icon: Users, name: "Poolside Comfort Room", detail: "Clean facilities right by the pool" }
-      ]
-    },
-    {
-      title: "Accommodations",
-      description: "Comfortable sleeping arrangements for groups",
-      items: [
-        { icon: Bed, name: "Room 1", detail: "Air-conditioned room for 2 guests" },
-        { icon: Bed, name: "Room 2", detail: "8 guests (Queen bed, double deck, pull-out)" },
-        { icon: Bed, name: "Room 3", detail: "12 guests with 3 double deck beds" },
-        { icon: Users, name: "Total Capacity", detail: "22 guests maximum overnight stay" }
-      ]
-    },
-    {
-      title: "Entertainment",
-      description: "Fun activities and modern conveniences",
-      items: [
-        { icon: Music, name: "Unlimited Videoke", detail: "Sing your heart out with friends" },
-        { icon: Gamepad2, name: "Billiards", detail: "Classic pool table for group fun" },
-        { icon: Music, name: "Basic Sound System", detail: "Perfect for parties and events" },
-        { icon: Music, name: "Smart TV with YouTube", detail: "Entertainment and streaming access" }
-      ]
-    },
-    {
-      title: "Kitchen Facilities",
-      description: "Fully equipped for cooking and dining",
-      items: [
-        { icon: ChefHat, name: "Complete Kitchen Setup", detail: "Refrigerator, water dispenser, rice cooker" },
-        { icon: Utensils, name: "Cooking Equipment", detail: "Induction stove with pans and pots" },
-        { icon: ChefHat, name: "Microwave", detail: "Quick heating and food preparation" },
-        { icon: ChefHat, name: "8-Burner BBQ Griller", detail: "Perfect for outdoor cooking parties" }
-      ]
-    },
-    {
-      title: "General Amenities",
-      description: "Essential services for your comfort",
-      items: [
-        { icon: Wifi, name: "Free Unlimited Fast WiFi", detail: "High-speed internet throughout property" },
-        { icon: Car, name: "Secure Parking", detail: "Open parking space for up to 4 cars" },
-        { icon: Users, name: "Tables & Chairs", detail: "Seating arrangements for 22 guests" },
-        { icon: Music, name: "Event Ready", detail: "Perfect setup for celebrations" }
-      ]
-    }
-  ];
+const photos = [
+  { src: aerialView, alt: "Aerial view of the house, courtyard and pool" },
+  { src: villaExterior, alt: "Front of the villa with wooden veranda and stairs" },
+  { src: poolArea, alt: "Pool with tiled waterfall wall" },
+  { src: diningArea, alt: "Covered patio beside the pool" },
+  { src: outdoorSpace, alt: "Wooden veranda with the Villa Aurora sign" },
+  { src: loungeArea, alt: "Brick entrance and stairs up to the balcony" },
+  { src: roomSimple, alt: "Room 1 with queen bed and capiz window" },
+  { src: roomFamily, alt: "Room 2 with queen bed and double deck" },
+  { src: roomBunk, alt: "Room 3 with three double-deck beds" },
+];
 
-  const galleryCategories = [
-    {
-      title: "Swimming Pool & Outdoor Area",
-      images: [
-        { placeholder: "Family enjoying a sunny day by the pool" },
-        { placeholder: "Evening poolside ambiance with lighting" },
-        { placeholder: "Kids splashing in the kiddie pool" },
-        { placeholder: "Poolside BBQ gathering with friends" }
-      ]
-    },
-    {
-      title: "Cozy Rooms & Accommodations",
-      images: [
-        { placeholder: "Spacious air-conditioned master bedroom" },
-        { placeholder: "Bunk beds perfect for family groups" },
-        { placeholder: "Cozy room setup for intimate gatherings" },
-        { placeholder: "Well-appointed room with modern amenities" }
-      ]
-    },
-    {
-      title: "Kitchen & Dining",
-      images: [
-        { placeholder: "Modern kitchen with complete appliances" },
-        { placeholder: "BBQ griller setup for outdoor cooking" },
-        { placeholder: "Dining area set for family meals" },
-        { placeholder: "Kitchen island perfect for food preparation" }
-      ]
-    },
-    {
-      title: "Guest Celebrations",
-      images: [
-        { placeholder: "Birthday celebration by the poolside" },
-        { placeholder: "Family reunion group photo" },
-        { placeholder: "Wedding preparation in the bridal suite" },
-        { placeholder: "Anniversary dinner setup under the stars" }
-      ]
-    }
-  ];
+const policies = [
+  {
+    title: "Pet Policy",
+    icon: PawPrint,
+    items: [
+      "2–3 pets allowed with prior notice",
+      "Pets must be supervised at all times",
+      "Bring their own bedding/diapers",
+      "Not allowed on furniture or in the pool",
+      "₱500 damage fee may apply",
+    ],
+  },
+  {
+    title: "Cancellation & Rebooking",
+    icon: CalendarX,
+    items: [
+      "Downpayments are non-refundable",
+      "Rebooking allowed with at least 7 days' notice before check-in",
+      "Rebooking is valid for 3 months from the original booking date",
+      "Cancellations more than 14 days before check-in may get an 80% refund",
+      "Cancellations less than 7 days before check-in forfeit the downpayment",
+    ],
+  },
+  {
+    title: "Smoking",
+    icon: CigaretteOff,
+    items: ["No smoking inside the rooms", "Smoking only in open outdoor areas", "Please dispose of cigarette butts properly"],
+  },
+  {
+    title: "Visitors & Capacity",
+    icon: Users,
+    items: [
+      "Maximum overnight capacity: 22 guests",
+      "Day visitors allowed as long as overnight guests stay at 22 or fewer",
+      "Additional guest fee: ₱250 per person",
+      "Pool use limited to 22 swimmers (extra charges apply)",
+    ],
+  },
+  {
+    title: "Payment",
+    icon: Wallet,
+    items: [
+      "50% downpayment to secure the booking",
+      "Balance settled upon check-in",
+      "GCash, BPI and BDO accepted",
+      "Official receipts upon request",
+    ],
+  },
+  {
+    title: "House Rules",
+    icon: Home,
+    items: [
+      "Overnight: check-in 2:00 PM, check-out 12:00 NN",
+      "Day tour: 2:00 PM to 10:00 PM",
+      "Keep noise respectful of neighbors",
+      "Guests are responsible for property damage",
+      "Extension: ₱500 per hour (subject to availability)",
+    ],
+  },
+];
+
+const Gallery = () => {
+  const [open, setOpen] = useState<number | null>(null);
+  const show = (i: number) => setOpen((i + photos.length) % photos.length);
 
   return (
-    <section id="info" className="py-20 bg-muted/30">
+    <>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+        {photos.map((photo, i) => (
+          <button
+            key={photo.alt}
+            type="button"
+            onClick={() => setOpen(i)}
+            className={`group relative overflow-hidden rounded-lg bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              i === 0 ? "col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto" : "aspect-[4/3]"
+            }`}
+            aria-label={`View photo: ${photo.alt}`}
+          >
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </button>
+        ))}
+      </div>
+
+      <Dialog open={open !== null} onOpenChange={(o) => !o && setOpen(null)}>
+        <DialogContent className="max-w-5xl p-2 sm:p-3 bg-black border-0">
+          {open !== null && (
+            <>
+              <DialogTitle className="sr-only">Photo {open + 1} of {photos.length}</DialogTitle>
+              <DialogDescription className="sr-only">{photos[open].alt}</DialogDescription>
+              <img src={photos[open].src} alt={photos[open].alt} className="w-full max-h-[80vh] object-contain rounded" />
+              <div className="flex items-center justify-between gap-2 pt-2">
+                <Button variant="ghost" size="icon" className="h-11 w-11 text-white hover:bg-white/10 hover:text-white" onClick={() => show(open - 1)} aria-label="Previous photo">
+                  <ChevronLeft className="!size-6" />
+                </Button>
+                <p className="text-white/80 text-sm text-center">{photos[open].alt}</p>
+                <Button variant="ghost" size="icon" className="h-11 w-11 text-white hover:bg-white/10 hover:text-white" onClick={() => show(open + 1)} aria-label="Next photo">
+                  <ChevronRight className="!size-6" />
+                </Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
+const InfoTabs = () => {
+  return (
+    <section id="info" className="py-20 bg-muted/30 scroll-mt-16">
       <div className="container mx-auto px-4">
-        <Tabs defaultValue="amenities" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 max-w-3xl mx-auto mb-12 h-auto">
-            <TabsTrigger value="amenities" className="py-4 text-base">
-              <Waves className="w-4 h-4 mr-2" />
-              Amenities & Gallery
+        <SectionHeader
+          eyebrow="The Resort"
+          title="Amenities & Gallery"
+          subtitle="Everything you need for a perfect stay, from the pool to the kitchen."
+        />
+
+        <Tabs defaultValue="amenities" className="w-full max-w-6xl mx-auto">
+          <TabsList className="grid w-full grid-cols-3 max-w-xl mx-auto mb-10 h-auto p-1">
+            <TabsTrigger value="amenities" className="py-3 text-sm sm:text-base gap-2">
+              <Waves className="w-4 h-4 hidden sm:block" aria-hidden="true" />
+              Amenities
             </TabsTrigger>
-            <TabsTrigger value="calendar" className="py-4 text-base">
-              <CalendarIcon className="w-4 h-4 mr-2" />
-              Check Availability
+            <TabsTrigger value="gallery" className="py-3 text-sm sm:text-base gap-2">
+              <ImageIcon className="w-4 h-4 hidden sm:block" aria-hidden="true" />
+              Photos
             </TabsTrigger>
-            <TabsTrigger value="terms" className="py-4 text-base">
-              <FileText className="w-4 h-4 mr-2" />
-              Terms of Use
+            <TabsTrigger value="terms" className="py-3 text-sm sm:text-base gap-2">
+              <FileText className="w-4 h-4 hidden sm:block" aria-hidden="true" />
+              House Rules
             </TabsTrigger>
           </TabsList>
 
-          {/* Amenities & Gallery Tab */}
-          <TabsContent value="amenities" className="space-y-16">
-            {/* Amenities Section */}
-            <div>
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-cheetah title-outline text-primary mb-4">Resort Amenities</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
-                Everything you need for a perfect stay, from relaxation to entertainment and comfort
-              </p>
-            </div>
-              
-              <div className="space-y-12">
-                {amenityCategories.map((category, categoryIndex) => (
-                  <div key={categoryIndex}>
-                    <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
-                      <p className="text-muted-foreground">{category.description}</p>
+          <TabsContent value="amenities">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {amenityCategories.map(({ title, icon: Icon, items }) => (
+                <Card key={title} className="border-0 shadow-elegant">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-11 w-11 rounded-full bg-villa-gold/20 flex items-center justify-center shrink-0">
+                        <Icon className="h-5 w-5 text-villa-dark-brown" aria-hidden="true" />
+                      </div>
+                      <h3 className="text-xl font-semibold">{title}</h3>
                     </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {category.items.map((amenity, index) => {
-                        const IconComponent = amenity.icon;
-                        return (
-                          <Card key={index} className="group hover:shadow-glow transition-all duration-300 border-0 shadow-elegant hover:-translate-y-1">
-                            <CardContent className="p-6">
-                              <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
-                                  <IconComponent className="h-6 w-6 text-primary-foreground" />
-                                </div>
-                                <div className="flex-1">
-                                  <h4 className="font-semibold mb-2 group-hover:text-primary transition-colors">
-                                    {amenity.name}
-                                  </h4>
-                                  <p className="text-sm text-muted-foreground">
-                                    {amenity.detail}
-                                  </p>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Gallery Section */}
-            <div>
-              <div className="text-center mb-12">
-                <div className="flex justify-center items-center gap-2 mb-4">
-                  <ImageIcon className="h-8 w-8 text-primary" />
-                  <h2 className="text-4xl md:text-5xl font-cheetah title-outline text-primary">Photo Gallery</h2>
-                </div>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
-                  Discover the beauty and charm of Villa Aurora through our collection of spaces
-                </p>
-              </div>
-
-              <div className="space-y-16">
-                {galleryCategories.map((category, categoryIndex) => (
-                  <div key={categoryIndex}>
-                    <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {category.images.map((image, imageIndex) => (
-                        <Card key={imageIndex} className="group overflow-hidden border-0 shadow-elegant hover:shadow-glow transition-all duration-300 hover:-translate-y-1">
-                          <CardContent className="p-0">
-                            <div className="aspect-square relative bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-                              <div className="text-center p-6">
-                                <Camera className="h-12 w-12 text-primary/60 mx-auto mb-3 group-hover:text-primary/80 transition-colors" />
-                                <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                                  {image.placeholder}
-                                </p>
-                              </div>
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
-                                  <ImageIcon className="h-6 w-6 text-primary" />
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
+                    <ul className="space-y-2 text-[15px] text-foreground/80">
+                      {items.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-villa-gold shrink-0" aria-hidden="true" />
+                          {item}
+                        </li>
                       ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))}
+              <Card className="border-0 shadow-elegant overflow-hidden">
+                <img src={poolArea} alt="The pool at Villa Aurora" loading="lazy" className="h-full w-full object-cover min-h-48" />
+              </Card>
             </div>
           </TabsContent>
 
-          <TabsContent value="calendar">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-cheetah title-outline text-primary mb-4">Check Availability</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
-                View our real-time availability calendar - Green dates are available, Red dates are booked
-              </p>
-            </div>
-
-            <AvailabilityCalendar />
+          <TabsContent value="gallery">
+            <Gallery />
           </TabsContent>
 
           <TabsContent value="terms">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-cheetah title-outline text-primary mb-4">Terms of Use & Policies</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-lato">
-                Please review our policies to ensure a smooth and enjoyable experience at Villa Aurora
-              </p>
+            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+              {policies.map(({ title, icon: Icon, items }) => (
+                <Card key={title} className="border-0 shadow-elegant">
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                      <Icon className="h-5 w-5 text-secondary" aria-hidden="true" />
+                      {title}
+                    </h3>
+                    <ul className="space-y-1.5 text-[15px] text-foreground/80 list-disc pl-5 marker:text-villa-gold">
+                      {items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-
-            <div className="max-w-4xl mx-auto space-y-6">
-              {/* Pet Policy */}
-              <Card className="shadow-elegant">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    🐾 Pet Policy
-                  </h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p>• 2-3 pets are allowed with prior notice</p>
-                    <p>• Pets must be supervised at all times</p>
-                    <p>• Must have their own bedding/diapers</p>
-                    <p>• Not allowed on furniture or in the pool</p>
-                    <p>• ₱500 damage fee may apply if property is damaged</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Cancellation & Rebooking */}
-              <Card className="shadow-elegant">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    📋 Cancellation & Rebooking Policy
-                  </h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p>• <strong>Downpayments are non-refundable</strong></p>
-                    <p>• Rebooking is possible if notified at least 7 days prior to check-in date</p>
-                    <p>• Rebooking is valid for 3 months from original booking date</p>
-                    <p>• For cancellations more than 14 days before check-in, an 80% refund may be offered</p>
-                    <p>• Cancellations less than 7 days before check-in will forfeit the downpayment</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Smoking Policy */}
-              <Card className="shadow-elegant">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    🚭 Smoking Policy
-                  </h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p>• No smoking is allowed inside any of the rooms</p>
-                    <p>• Smoking is permitted in open outdoor areas only</p>
-                    <p>• Please dispose of cigarette butts properly</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Visitors & Capacity */}
-              <Card className="shadow-elegant">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    👥 Visitors & Capacity Policy
-                  </h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p>• Maximum overnight capacity: 22 guests</p>
-                    <p>• Day visitors are allowed as long as overnight guests do not exceed 22</p>
-                    <p>• Additional guest fee: ₱250 per person</p>
-                    <p>• Pool use is limited to 22 swimmers (additional charges apply for more)</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Payment Terms */}
-              <Card className="shadow-elegant">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    💳 Payment Terms
-                  </h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p>• 50% downpayment required to secure booking</p>
-                    <p>• Remaining balance must be settled upon check-in</p>
-                    <p>• Accepted payment methods: GCash, BPI, BDO</p>
-                    <p>• Official receipts provided upon request</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* House Rules */}
-              <Card className="shadow-elegant">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    🏡 House Rules
-                  </h3>
-                  <div className="space-y-2 text-muted-foreground">
-                    <p>• Check-in: 2:00 PM | Check-out: 12:00 PM (Overnight)</p>
-                    <p>• Day Tour: 2:00 PM - 10:00 PM</p>
-                    <p>• Please keep noise levels respectful of neighbors</p>
-                    <p>• Guests are responsible for any property damage</p>
-                    <p>• Please help us keep the resort clean and well-maintained</p>
-                    <p>• Extension fees: ₱500 per hour (subject to availability)</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Contact for Questions */}
-              <Card className="shadow-elegant bg-primary/5 border-primary/20">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-2">Questions About Our Policies?</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Feel free to contact us for clarification or special requests
-                  </p>
-                  <p className="font-semibold text-primary">📞 (0953) 357 2419</p>
-                  <p className="text-sm text-muted-foreground">Kuya Rudy & Ate Ruby</p>
-                </CardContent>
-              </Card>
+            <div className="mt-6 text-center p-6 rounded-lg bg-villa-gold/10 border border-villa-gold/40">
+              <h3 className="text-xl font-semibold mb-1">Questions about our policies?</h3>
+              <p className="text-foreground/70 mb-4">Message us anytime, we're happy to help.</p>
+              <Button variant="messenger" size="lg" asChild>
+                <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle />
+                  Ask on Messenger
+                </a>
+              </Button>
             </div>
           </TabsContent>
         </Tabs>

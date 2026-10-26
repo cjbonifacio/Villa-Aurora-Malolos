@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Info } from "lucide-react";
+import { CONTACT, startBooking } from "@/lib/booking";
 import {
   addMonths,
   subMonths,
@@ -55,9 +56,9 @@ const AvailabilityCalendar = () => {
   const isPast = (date: Date) => isBefore(date, today);
 
   const getDateColor = (date: Date) => {
-    if (isPast(date)) return "bg-muted text-muted-foreground border-muted cursor-default";
-    if (isBooked(date)) return "bg-red-500 hover:bg-red-600 text-white border-red-600";
-    return "bg-green-500 hover:bg-green-600 text-white border-green-600";
+    if (isPast(date)) return "bg-muted/60 text-foreground/35 border-transparent";
+    if (isBooked(date)) return "bg-red-600 text-white border-red-600 opacity-90";
+    return "bg-green-700 hover:bg-green-800 hover:scale-105 text-white border-green-700 cursor-pointer";
   };
 
   const getDateStatus = (date: Date) => {
@@ -70,8 +71,8 @@ const AvailabilityCalendar = () => {
   const canGoBack = startOfMonth(currentMonth) > startOfMonth(today);
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <Card className="shadow-elegant">
+    <div>
+      <Card className="shadow-elegant border-0">
         <CardContent className="p-4 sm:p-6">
           {/* Calendar Header */}
           <div className="flex items-center justify-between mb-6">
@@ -114,7 +115,7 @@ const AvailabilityCalendar = () => {
               <div className="flex justify-center gap-3">
                 <Button onClick={() => refetch()}>Retry</Button>
                 <Button variant="outline" asChild>
-                  <a href="https://m.me/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
+                  <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
                     Message us
                   </a>
                 </Button>
@@ -149,8 +150,10 @@ const AvailabilityCalendar = () => {
                     >
                       <button
                         type="button"
+                        disabled={isPast(date) || isBooked(date)}
+                        onClick={() => startBooking({ checkIn: format(date, "yyyy-MM-dd") })}
                         aria-label={`${format(date, "MMMM d, yyyy")}: ${getDateStatus(date)}`}
-                        className={`w-full h-full rounded-full border-2 font-semibold transition-all duration-200 hover:scale-110 ${getDateColor(date)}`}
+                        className={`w-full h-full rounded-full border-2 text-sm sm:text-base font-semibold transition-transform duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${getDateColor(date)}`}
                       >
                         {format(date, "d")}
                       </button>
@@ -168,31 +171,27 @@ const AvailabilityCalendar = () => {
               </div>
 
               {/* Legend */}
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-500 border-2 border-green-600 flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">07</span>
-                  </div>
-                  <span className="text-sm font-medium">Available</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-red-500 border-2 border-red-600 flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">07</span>
-                  </div>
-                  <span className="text-sm font-medium">Booked</span>
-                </div>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-green-700" aria-hidden="true" />
+                  Available
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-red-600" aria-hidden="true" />
+                  Booked
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-muted" aria-hidden="true" />
+                  Past
+                </span>
               </div>
 
-              {/* Info Box */}
-              <div className="mt-8 p-4 bg-primary/5 rounded-lg border border-primary/20">
-                <h4 className="font-semibold mb-2 text-center">💡 Booking Information</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Green dates are available for booking</li>
-                  <li>• Red dates are already booked</li>
-                  <li>• Check-out day is open for the next guest's check-in</li>
-                  <li>• Weekend rates apply for Friday-Saturday bookings</li>
-                  <li>• 50% downpayment required to secure your reservation</li>
-                </ul>
+              <div className="mt-6 flex gap-3 p-4 rounded-lg bg-villa-gold/10 border border-villa-gold/40 text-sm">
+                <Info className="h-5 w-5 text-secondary shrink-0" aria-hidden="true" />
+                <p className="text-foreground/80">
+                  Check-out day is open for the next guest's check-in. Weekend rates apply Friday–Saturday. A 50%
+                  downpayment secures your date.
+                </p>
               </div>
             </>
           )}

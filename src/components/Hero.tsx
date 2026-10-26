@@ -1,97 +1,71 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Star, Users } from "lucide-react";
+import { CalendarCheck, CalendarDays, MapPin, Users } from "lucide-react";
 import heroImage from "@/assets/villa-exterior.jpg";
+import { scrollToSection, startBooking } from "@/lib/booking";
+
+const STATS = [
+  { value: "3", label: "AC Rooms" },
+  { value: "2", label: "Pools" },
+  { value: "22", label: "Overnight Guests" },
+  { value: "4", label: "Parking Slots" },
+];
 
 const Hero = () => {
   return (
-    <section id="home" className="relative min-h-screen flex items-center">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url(${heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40"></div>
-      </div>
+    <section id="home" className="relative min-h-[calc(100svh-4rem)] flex items-center overflow-hidden">
+      <img
+        src={heroImage}
+        alt="Villa Aurora's Filipino-style house, veranda and courtyard"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Darker on the left so the text is easy to read */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/20" />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4">
-        <div className="max-w-4xl">
-          <div className="mb-6 flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-secondary text-secondary" />
-              ))}
-            </div>
-            <span className="text-white/80 font-medium">Premium Private Resort</span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-cheetah title-outline text-white mb-6 leading-tight">
-            Villa Aurora
-            <span className="block text-3xl md:text-4xl font-lato font-light text-secondary mt-2">
-              Your Luxurious Haven
-            </span>
-          </h1>
-
-          <p className="text-xl md:text-2xl font-lato text-white/90 mb-8 max-w-2xl leading-relaxed">
-            Experience the perfect blend of modern comfort and cultural charm in Malolos, Bulacan. 
-            Your home away from home for intimate getaways and special celebrations. 🏡
+      <div className="relative z-10 container mx-auto px-4 py-16">
+        <div className="max-w-2xl">
+          <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.12em] md:tracking-[0.2em] text-villa-gold mb-4">
+            Private Resort · Malolos, Bulacan
           </p>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
-            <div className="flex items-center space-x-2 text-white/80">
-              <MapPin className="w-5 h-5 text-secondary" />
-              <span>Near Barasoain Church, Malolos</span>
-            </div>
-            <div className="flex items-center space-x-2 text-white/80">
-              <Users className="w-5 h-5 text-secondary" />
-              <span>Up to 22 Guests</span>
-            </div>
+          <h1 className="text-6xl md:text-8xl font-cheetah title-outline leading-none mb-4">Villa Aurora</h1>
+          <p className="text-2xl md:text-3xl font-light text-white mb-6">Your luxurious haven</p>
+
+          <p className="text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
+            The whole resort is yours: modern comfort with Filipino charm, minutes from Barasoain Church. Made for
+            family getaways, celebrations and wedding preparations.
+          </p>
+
+          <div className="flex flex-wrap gap-x-6 gap-y-2 mb-8 text-white/90">
+            <span className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-villa-gold" />
+              Near Barasoain Church
+            </span>
+            <span className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-villa-gold" />
+              Up to 22 overnight guests
+            </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <Button variant="hero" size="xl" className="font-montserrat" asChild>
-              <a href="https://www.facebook.com/villaaurora.malolos" target="_blank" rel="noopener noreferrer">
-                <Calendar className="w-5 h-5" />
-                Book Your Stay
-              </a>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button variant="hero" size="xl" className="px-8" onClick={() => startBooking()}>
+              <CalendarCheck />
+              Book Your Stay
             </Button>
-            <Button 
-              variant="luxury" 
-              size="xl" 
-              className="font-montserrat"
-              onClick={() => {
-                document.querySelector('#packages')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              View Packages
+            <Button variant="luxury" size="xl" className="px-8" onClick={() => scrollToSection("#availability")}>
+              <CalendarDays />
+              Check Availability
             </Button>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-8 border-t border-white/20">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">3</div>
-              <div className="text-white/70 text-sm">AC Rooms</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">2</div>
-              <div className="text-white/70 text-sm">Pools</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">22</div>
-              <div className="text-white/70 text-sm">Max Guests</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">4</div>
-              <div className="text-white/70 text-sm">Parking Slots</div>
-            </div>
-          </div>
+          <dl className="grid grid-cols-4 gap-4 mt-12 pt-6 border-t border-white/25 max-w-lg">
+            {STATS.map((s) => (
+              <div key={s.label}>
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="text-3xl md:text-4xl font-bold text-white">{s.value}</dd>
+                <dd className="text-white/75 text-xs md:text-sm leading-tight">{s.label}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
