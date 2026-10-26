@@ -25,11 +25,26 @@ The code is ready. These steps need your own accounts, so you do them once.
 - Send a request from the site's contact form → it appears in **Table Editor → booking_requests**
   with status `pending`.
 
-## 4. Day-to-day (until the admin sync is built)
-- When you confirm a booking, add its dates to `blocked_dates` (check_out = the day they leave).
-- Check `booking_requests` for new requests, then contact the guest.
-- Make your Google Calendar private (Calendar settings → Access permissions → untick
-  "Make available to public"). The website no longer uses it.
+## 4. Connect Google Calendar (bookings show on the site automatically)
+1. On a computer, open https://calendar.google.com → gear icon → **Settings**.
+2. Left side, under **Settings for my calendars**, click **villaauroramalolos@gmail.com**.
+3. Scroll to **Integrate calendar** → **Secret address in iCal format** → click the copy icon.
+   (It ends in `/basic.ics` and contains `/private-`. Treat it like a password.)
+4. Vercel → project → **Settings → Environment Variables → Add Environment Variable**:
+   - Key: `GOOGLE_CALENDAR_ICS_URL`
+   - Value: paste the secret address
+   - Environments: **Production** and **Preview** → **Save**
+5. Vercel → **Deployments** → newest one → **⋯** → **Redeploy** (settings only apply after a redeploy).
+6. Make the calendar private: same settings page → **Access permissions for events** →
+   untick **Make available to public**. The secret address keeps working.
+
+What blocks a date: all-day events (the admin app saves bookings this way) and timed events of
+6+ hours. Short events like a 1-hour ocular visit, and cancelled events, don't block anything.
+Changes show on the site within about 5 minutes.
+
+Day to day: bookings saved in the admin app appear automatically. New requests arrive in
+Messenger and in Supabase `booking_requests`. You can still block a date by hand in Supabase
+`blocked_dates` (check_out = the day guests leave).
 
 ## 5. Analytics (visitor stats + page speed)
 The code is already in. Turn it on once in Vercel:
