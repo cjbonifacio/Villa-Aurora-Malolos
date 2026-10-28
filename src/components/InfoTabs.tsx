@@ -43,7 +43,7 @@ const amenityCategories: { title: string; icon: typeof Waves; photo: PhotoName; 
     title: "Kitchen & Kitchenware",
     icon: ChefHat,
     photo: "kitchen",
-    alt: "Kitchen with sink, rice cooker and appliances",
+    alt: "Kitchen counter with rice cooker, kettle, knives and utensils",
     items: [
       "2-door refrigerator, microwave, rice cooker, electric kettle",
       "Induction stove with 2 pans and 1 pot",
@@ -89,7 +89,10 @@ const photos = (
     { name: "room-2", alt: "Room 2 with a queen bed and double deck" },
     { name: "room-3", alt: "Room 3 with three double-deck beds" },
     { name: "bathroom", alt: "Bathroom with hot and cold shower" },
-    { name: "kitchen", alt: "Kitchen with appliances" },
+    { name: "kitchen", alt: "Kitchen counter with rice cooker, kettle, knives and utensils" },
+    { name: "kitchen-stove", alt: "Induction stove with two pans" },
+    { name: "kitchenware", alt: "Plates, glasses, cups and spoons for 22 guests" },
+    { name: "kitchen-sink", alt: "Double kitchen sink with Filipino-style tiles" },
     { name: "bbq-grill", alt: "BBQ grill beside the garden" },
   ] as { name: PhotoName; alt: string }[]
 ).map((p) => ({ ...p, ...photo(p.name, "(min-width: 768px) 33vw, 50vw"), large: largePhoto(p.name) }));
@@ -168,14 +171,15 @@ const Gallery = () => {
             type="button"
             onClick={() => setOpen(i)}
             className={`group relative overflow-hidden rounded-lg bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              i === 0 ? "col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto" : "aspect-[4/3]"
+              // First photo is large on bigger screens (24 photos fill the grid evenly on phones and computers)
+              i === 0 ? "md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto" : "aspect-[4/3]"
             }`}
             aria-label={`View photo: ${photo.alt}`}
           >
             <img
               src={photo.src}
               srcSet={photo.srcSet}
-              sizes={i === 0 ? "(min-width: 768px) 66vw, 100vw" : photo.sizes}
+              sizes={i === 0 ? "(min-width: 768px) 66vw, 50vw" : photo.sizes}
               alt={photo.alt}
               loading="lazy"
               decoding="async"

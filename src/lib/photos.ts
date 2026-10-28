@@ -25,6 +25,8 @@ export type PhotoName =
   | "bathroom"
   | "kitchen"
   | "kitchen-stove"
+  | "kitchen-sink"
+  | "kitchenware"
   | "videoke"
   | "bbq-grill"
   | "tables-chairs";
