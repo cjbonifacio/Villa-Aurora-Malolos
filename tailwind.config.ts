@@ -13,8 +13,13 @@ export default {
       },
     },
     extend: {
+      // Three fonts, each with one job:
+      //   cheetah  -> logo, hero and section titles (brand script)
+      //   display  -> headings, card titles, prices (Fraunces serif)
+      //   sans     -> all body text, buttons, labels (Lexend)
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["Lexend", "system-ui", "sans-serif"],
+        display: ["Fraunces", "Georgia", "serif"],
         cheetah: ["Cheetah Kick", "cursive"],
       },
       colors: {

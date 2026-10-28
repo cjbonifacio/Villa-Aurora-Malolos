@@ -15,7 +15,7 @@ const LegalPage = ({ title, updated, intro, sections }: { title: string; updated
       <div className="space-y-8">
         {sections.map((s, i) => (
           <section key={s.title} aria-labelledby={`sec-${i}`}>
-            <h2 id={`sec-${i}`} className="!font-sans !text-2xl font-semibold !text-foreground mb-3">
+            <h2 id={`sec-${i}`} className="!font-display !text-2xl font-semibold !text-foreground mb-3">
               {i + 1}. {s.title}
             </h2>
             <div className="text-[17px] leading-relaxed text-foreground/85 space-y-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1.5 [&_a]:text-secondary [&_a]:underline [&_a]:underline-offset-2">

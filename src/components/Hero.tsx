@@ -32,7 +32,7 @@ const Hero = () => {
           </p>
 
           <h1 className="text-6xl md:text-8xl font-cheetah title-on-dark leading-none mb-4">Villa Aurora</h1>
-          <p className="text-2xl md:text-3xl font-light text-white mb-6">Your luxurious haven</p>
+          <p className="font-display italic text-2xl md:text-4xl font-normal text-white/95 mb-6">Your luxurious haven</p>
 
           <p className="text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
             The whole resort is yours: modern comfort with Filipino charm, minutes from Barasoain Church. Made for
@@ -65,7 +65,7 @@ const Hero = () => {
             {STATS.map((s) => (
               <div key={s.label}>
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="text-3xl md:text-4xl font-bold text-white">{s.value}</dd>
+                <dd className="font-display text-3xl md:text-4xl font-semibold text-white">{s.value}</dd>
                 <dd className="text-white/75 text-xs md:text-sm leading-tight">{s.label}</dd>
               </div>
             ))}

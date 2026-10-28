@@ -18,47 +18,52 @@ const amenityCategories: { title: string; icon: typeof Waves; photo: PhotoName; 
     icon: Waves,
     photo: "pool-waterfall",
     alt: "Pool with a tiled waterfall wall",
-    items: ["Private adult pool (3–5 ft) with waterfall", "Kiddie pool (2 ft)", "2 outdoor showers", "Poolside comfort room"],
+    items: ["Swimming pool with waterfall", "Kiddie area for children", "Outdoor shower & comfort room", "Outdoor lounge with pool view"],
   },
   {
-    title: "Air-conditioned Rooms",
+    title: "3 Air-conditioned Bedrooms",
     icon: Bed,
     photo: "room-2",
     alt: "Room 2 with a queen bed and double-deck beds",
     items: [
-      "Room 1: queen bed, 2 guests",
-      "Room 2: 8 guests (queen bed, double deck, pull-out)",
-      "Room 3: 12 guests (3 double decks)",
-      "22 guests maximum overnight",
+      "Room 1 (1st floor): 1 bed, good for 2. Ideal for couples or seniors",
+      "Room 2 (2nd floor): queen bed, double deck and pull-out bed, good for 8",
+      "Room 3 (2nd floor): 3 double decks, good for 12. Perfect for barkadas",
+      "Up to 22 guests overnight",
     ],
   },
   {
-    title: "Living & Dining Hall",
+    title: "Living & Dining",
     icon: Sofa,
     photo: "living-dining",
     alt: "Living room and long dining table under a wooden ceiling",
-    items: ["Air-conditioned lounge with sofa", "Long dining table for the whole group", "Smart TV with YouTube", "Filipino capiz windows and tiles"],
+    items: ["Living room with Smart TV (YouTube)", "Indoor dining table for the whole group", "Outdoor dining area", "Two-story traditional Filipino-style villa"],
   },
   {
-    title: "Kitchen",
+    title: "Kitchen & Kitchenware",
     icon: ChefHat,
     photo: "kitchen",
     alt: "Kitchen with sink, rice cooker and appliances",
-    items: ["Refrigerator and water dispenser", "Induction stove with pots and pans", "Rice cooker and microwave", "Plates, glasses and utensils"],
+    items: [
+      "2-door refrigerator, microwave, rice cooker, electric kettle",
+      "Induction stove with 2 pans and 1 pot",
+      "22 sets of glass plates, saucers, utensils and glasses",
+      "Knives, scissors, spatulas and cooking utensils",
+    ],
   },
   {
-    title: "Videoke & Entertainment",
+    title: "Videoke",
     icon: Mic,
     photo: "videoke",
     alt: "Videoke machine by the Villa Aurora green wall",
-    items: ["Unlimited videoke", "Billiards table", "Basic sound system", "Covered pavilion for parties"],
+    items: ["Videoke speaker with 2 microphones", "Covered pavilion beside the pool", "Space for birthdays and reunions", "Professional sound available as an add-on"],
   },
   {
-    title: "Outdoor & BBQ",
+    title: "Outdoor, BBQ & Parking",
     icon: Flame,
     photo: "bbq-grill",
     alt: "Charcoal BBQ grill beside the garden",
-    items: ["8-burner BBQ griller", "Tables & chairs for 22", "Tiled courtyard and veranda", "Free WiFi and parking for 4 cars"],
+    items: ["Big BBQ griller", "Chairs and tables", "4-car parking area", "Free unlimited fast WiFi"],
   },
 ];
 
@@ -206,7 +211,7 @@ const Gallery = () => {
 
 const InfoTabs = () => {
   return (
-    <section id="info" className="py-20 bg-muted/30 scroll-mt-16">
+    <section id="info" className="py-20 md:py-28 bg-muted/30 scroll-mt-16">
       <div className="container mx-auto px-4">
         <SectionHeader
           eyebrow="The Resort"

@@ -203,7 +203,7 @@ const EnhancedContact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-background scroll-mt-16">
+    <section id="contact" className="py-20 md:py-28 bg-background scroll-mt-16">
       <div className="container mx-auto px-4">
         <SectionHeader
           eyebrow="Book Your Stay"

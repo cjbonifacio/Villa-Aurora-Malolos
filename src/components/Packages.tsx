@@ -12,21 +12,26 @@ const overnightWeekdayRates = [
   { pax: "19–22", price: "₱17,000" },
 ];
 
+// Same lists as the "Amenities: Overnight" and "Amenities: Daytour" marketing graphics.
 const overnightInclusions = [
-  "Exclusive use of the entire resort",
-  "3 fully air-conditioned rooms",
-  "Pool access & kitchen with appliances",
-  "Basic sound system & Smart TV",
-  "BBQ griller, tables & chairs for 22",
-  "Free WiFi & 4-car parking",
+  "Exclusive use of the two-story Filipino-style villa",
+  "3 air-conditioned bedrooms",
+  "Swimming pool with kiddie area",
+  "Indoor & outdoor dining, plus a fully equipped kitchen",
+  "Living room with Smart TV (YouTube)",
+  "Videoke speaker with 2 microphones",
+  "Outdoor lounge with pool view, big BBQ griller",
+  "Free unlimited fast WiFi & 4-car parking",
 ];
 
 const dayTourInclusions = [
-  "Pool access & outdoor open space",
-  "22-seater tables and chairs",
-  "Basic sound system",
-  "Refrigerator & water dispenser",
-  "Outdoor sink & facilities",
+  "Common areas from 2:00 PM to 10:00 PM",
+  "Swimming pool with kiddie area",
+  "Outdoor lounge, indoor & outdoor dining",
+  "Outdoor shower & comfort room",
+  "Videoke speaker with 2 microphones",
+  "Big BBQ griller & kitchen space",
+  "Free unlimited fast WiFi & 4-car parking",
 ];
 
 const bookingInfo = [
@@ -54,7 +59,7 @@ const Inclusions = ({ items, excluded }: { items: string[]; excluded?: string[] 
 
 const Packages = () => {
   return (
-    <section id="packages" className="py-20 gradient-subtle scroll-mt-16">
+    <section id="packages" className="py-20 md:py-28 gradient-subtle scroll-mt-16">
       <div className="container mx-auto px-4">
         <SectionHeader
           eyebrow="Packages & Rates"
@@ -75,22 +80,22 @@ const Packages = () => {
             </CardHeader>
             <CardContent className="flex flex-col flex-1 gap-6">
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-foreground/70 mb-3">Weekdays (Sun–Thu)</h4>
+                <h4 className="font-sans text-xs font-medium uppercase tracking-[0.16em] text-foreground/70 mb-3">Weekdays (Sun–Thu)</h4>
                 <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2">
                   {overnightWeekdayRates.map((rate) => (
                     <div key={rate.pax} className="flex justify-between items-baseline p-3 bg-muted/60 rounded-lg">
                       <span className="text-sm whitespace-nowrap">{rate.pax} pax</span>
-                      <span className="font-bold text-villa-dark-brown">{rate.price}</span>
+                      <span className="font-display font-semibold text-lg text-villa-dark-brown">{rate.price}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-foreground/70 mb-3">Weekends & Holidays (Fri–Sat)</h4>
+                <h4 className="font-sans text-xs font-medium uppercase tracking-[0.16em] text-foreground/70 mb-3">Weekends & Holidays (Fri–Sat)</h4>
                 <div className="flex justify-between items-baseline p-4 rounded-lg border border-villa-gold/60 bg-villa-gold/10">
                   <span>Up to 22 guests</span>
-                  <span className="font-bold text-2xl text-villa-dark-brown">₱20,000</span>
+                  <span className="font-display font-semibold text-3xl text-villa-dark-brown">₱20,000</span>
                 </div>
               </div>
 
@@ -118,18 +123,18 @@ const Packages = () => {
             </CardHeader>
             <CardContent className="flex flex-col flex-1 gap-6">
               <div className="text-center p-5 rounded-lg border border-villa-gold/60 bg-villa-gold/10">
-                <div className="text-4xl font-bold text-villa-dark-brown mb-1">₱15,000</div>
+                <div className="font-display text-5xl font-semibold text-villa-dark-brown mb-1">₱15,000</div>
                 <div>Up to 50 guests</div>
                 <div className="text-sm text-foreground/70 mt-1">Pool limited to 22 swimmers</div>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-3">Included</h4>
-                <Inclusions items={dayTourInclusions} excluded={["No room access"]} />
+                <Inclusions items={dayTourInclusions} excluded={["No bedroom access"]} />
               </div>
 
               <div className="bg-muted/60 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2 text-sm uppercase tracking-wide text-foreground/70">Additional charges</h4>
+                <h4 className="font-sans text-xs font-medium uppercase tracking-[0.16em] text-foreground/70 mb-2">Additional charges</h4>
                 <dl className="text-sm space-y-1">
                   <div className="flex justify-between"><dt>Excess swimmers</dt><dd className="font-medium">₱250 / person</dd></div>
                   <div className="flex justify-between"><dt>Extension</dt><dd className="font-medium">₱500 / hour</dd></div>

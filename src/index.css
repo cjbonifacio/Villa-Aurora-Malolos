@@ -10,24 +10,33 @@
   font-display: swap;
 }
 
-/* Villa Aurora Design System - Typography */
+/* Villa Aurora Design System - Typography
+   Cheetah Kick = titles (h1, h2), Fraunces = headings (h3, h4), Lexend = everything else. */
 body {
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
-  line-height: 1.6;
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 350;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+}
+
+strong, b {
+  font-weight: 500;
 }
 
 h1, h2 {
   font-family: 'Cheetah Kick', cursive;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.15;
   color: #8F6230; /* deep gold: readable on cream (4.7:1) */
 }
 
 h3, h4 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Fraunces', Georgia, serif;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-optical-sizing: auto;
 }
 
 h1 {
@@ -43,8 +52,9 @@ h3 {
 }
 
 button, .btn {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 @media (max-width: 768px) {
@@ -57,7 +67,7 @@ button, .btn {
   }
 
   h2 {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   h3 {
@@ -101,7 +111,7 @@ button, .btn {
     --villa-forest-green: 97 41% 39%; /* #5A8C3A */
 
     --gradient-subtle: linear-gradient(180deg, hsl(39 38% 93%), hsl(39 39% 84%));
-    --shadow-elegant: 0 10px 30px -10px hsl(26 52% 28% / 0.3);
+    --shadow-elegant: 0 1px 2px hsl(21 33% 27% / 0.05), 0 16px 40px -20px hsl(21 33% 27% / 0.25);
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.75rem;

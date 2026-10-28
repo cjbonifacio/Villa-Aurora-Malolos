@@ -29,7 +29,7 @@ const photos = [
 
 const Weddings = () => {
   return (
-    <section id="weddings" className="py-20 bg-gradient-to-b from-background to-muted/40 scroll-mt-16">
+    <section id="weddings" className="py-20 md:py-28 bg-gradient-to-b from-background to-muted/40 scroll-mt-16">
       <div className="container mx-auto px-4">
         <SectionHeader
           eyebrow="Weddings"

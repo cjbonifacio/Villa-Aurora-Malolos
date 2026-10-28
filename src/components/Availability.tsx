@@ -5,7 +5,7 @@ import SectionHeader from "@/components/SectionHeader";
 // guest names or booking details are ever shown publicly.
 const Availability = () => {
   return (
-    <section id="availability" className="py-20 bg-background scroll-mt-16">
+    <section id="availability" className="py-20 md:py-28 bg-background scroll-mt-16">
       <div className="container mx-auto px-4">
         <SectionHeader
           eyebrow="Check Availability"
