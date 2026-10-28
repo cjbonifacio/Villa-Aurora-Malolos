@@ -49,6 +49,12 @@ which turns the date red on the site within about 5 minutes.
 - HTTPS only, security headers (HSTS, CSP, no framing). Database keys stay on the server.
 - Vercel Analytics + Speed Insights (cookie-free).
 
+**Guest guide (private)**
+- `/guide/<secret>`: check-in/out, WiFi (with copy button), rules with Tagalog notes, amenities, fees, nearby places
+  with walking times, emergency numbers, and a Google review button + QR. Hidden from Google.
+- Wrong link → normal 404. The WiFi password is never in the website code; the server sends it only with the right link.
+- Content comes from `api/guide.ts` (built-in defaults) merged with your Google Sheet. See "Editing the guest guide" below.
+
 **Repo**
 - Unused template code and 36 unused packages removed. Only `main` branch.
 
@@ -59,8 +65,22 @@ which turns the date red on the site within about 5 minutes.
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase secret key (server only) |
 | `GOOGLE_CALENDAR_ICS_URL` | Google Calendar "Secret address in iCal format" |
+| `GUIDE_SECRET` | Long random string. The guest link is `/guide/<this>`. Change it (and redeploy) if the link leaks |
+| `GUIDE_SHEET_CSV_URL` | Google Sheet "Guide" tab published as CSV (WiFi + any edits) |
 
 Change a setting → Deployments → ⋯ → Redeploy.
+
+## Editing the guest guide (no code)
+
+1. Google Sheets: new sheet, rename the tab `Guide`, import `docs/guide-sheet-template.csv` (File → Import), then type the WiFi password.
+2. File → Share → Publish to web → choose the `Guide` tab and **CSV** → Publish → copy the link into `GUIDE_SHEET_CSV_URL` on Vercel.
+3. Make a secret (`node -e "console.log(require('crypto').randomBytes(18).toString('base64url'))"`), put it in `GUIDE_SECRET`, redeploy.
+4. Send guests `https://villa-aurora-malolos.vercel.app/guide/<secret>` on Messenger after you confirm the booking.
+
+Columns: `section, key, value, value_tl (Tagalog), link`. A row with the same section and key as a built-in line replaces it;
+a new key adds a line; an empty `value` hides a built-in line. Sections: `wifi`, `checkin`, `checkout`, `rules`, `fees`,
+`explore`, `emergency`. Changes show within about 5 minutes. The published CSV link is readable by anyone who has it,
+so keep it private and put nothing in the sheet you wouldn't give a guest.
 
 ## Where to change things
 
