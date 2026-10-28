@@ -26,3 +26,15 @@ export const rowsOf = (rows: GuideRow[], section: string) => rows.filter((r) => 
 
 export const valueOf = (rows: GuideRow[], section: string, key: string) =>
   rows.find((r) => r.section === section && r.key.toLowerCase() === key.toLowerCase())?.value ?? "";
+
+// Section ids for the sticky menu at the top of the page.
+export const GUIDE_NAV = [
+  { id: "checkin", label: "Check-in" },
+  { id: "wifi", label: "WiFi" },
+  { id: "rules", label: "Rules" },
+  { id: "amenities", label: "Amenities" },
+  { id: "fees", label: "Fees" },
+  { id: "explore", label: "Explore" },
+  { id: "emergency", label: "Emergency" },
+  { id: "review", label: "Review" },
+];
