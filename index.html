@@ -32,13 +32,12 @@
     <meta name="twitter:image" content="https://villa-aurora-malolos.vercel.app/og-image.jpg" />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="/fonts/Cheetah-Kick.otf" as="font" type="font/otf" crossorigin>
+    <!-- Body and heading fonts: fetched immediately so text doesn't jump when they arrive -->
+    <link rel="preload" href="/node_modules/@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/node_modules/@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Start downloading the hero photo right away (it's the biggest thing on screen) -->
     <link rel="preload" as="image" fetchpriority="high" href="/images/exterior-evening-1024.webp" imagesrcset="/images/exterior-evening-640.webp 640w, /images/exterior-evening-1024.webp 1024w, /images/exterior-evening-1600.webp 1600w" imagesizes="100vw">
-    <!-- Fraunces: headings and prices. Lexend: body text. (Cheetah Kick, the title script, is in public/fonts.) -->
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Lexend:wght@300..600&display=swap" rel="stylesheet">
 
     <!-- Business details for Google -->
     <script type="application/ld+json">
