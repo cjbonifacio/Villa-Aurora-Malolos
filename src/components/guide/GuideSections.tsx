@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DoorOpen, Wifi, ScrollText, Waves, Wallet, MapPin, Siren, Star, Copy, Check, Navigation } from "lucide-react";
+import { DoorOpen, Wifi, ScrollText, Waves, Wallet, MapPin, Siren, Star, Copy, Check, Navigation, Eye, EyeOff } from "lucide-react";
 import { amenityCategories } from "@/lib/amenities";
 import { CONTACT } from "@/lib/booking";
 import { REVIEW_URL, rowsOf, valueOf, type GuideRow } from "@/lib/guide";
@@ -74,7 +74,7 @@ const CopyButton = ({ text }: { text: string }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* the password is visible on screen, so guests can still type it */
+      /* if the browser blocks copying, guests can tap the eye button and type it */
     }
   };
   return (
@@ -82,6 +82,33 @@ const CopyButton = ({ text }: { text: string }) => {
       {copied ? <Check /> : <Copy />}
       {copied ? "Copied" : "Copy password"}
     </Button>
+  );
+};
+
+// WiFi password, hidden as dots until the guest taps the eye button, so it can't be read over their shoulder.
+// While hidden, the real password is not in the page text at all. "Copy password" works either way.
+const PasswordField = ({ password }: { password: string }) => {
+  const [shown, setShown] = useState(false);
+  return (
+    <div className="mt-3">
+      <p className="text-sm text-foreground/70">Password</p>
+      <div className="flex items-center gap-2">
+        <p className="min-w-0 flex-1 break-all text-lg font-semibold">{shown ? password : "••••••••••"}</p>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-11 w-11 shrink-0"
+          onClick={() => setShown((s) => !s)}
+          aria-pressed={shown}
+          aria-label={shown ? "Hide password" : "Show password"}
+        >
+          {shown ? <EyeOff /> : <Eye />}
+        </Button>
+      </div>
+      <div className="mt-3">
+        <CopyButton text={password} />
+      </div>
+    </div>
   );
 };
 
@@ -121,18 +148,8 @@ export const GuideSections = ({ rows }: { rows: GuideRow[] }) => {
                   <dd className="text-lg font-semibold">{wifiName}</dd>
                 </div>
               )}
-              {wifiPassword && (
-                <div>
-                  <dt className="text-sm text-foreground/70">Password</dt>
-                  <dd className="text-lg font-semibold break-all">{wifiPassword}</dd>
-                </div>
-              )}
             </dl>
-            {wifiPassword && (
-              <div className="mt-4">
-                <CopyButton text={wifiPassword} />
-              </div>
-            )}
+            {wifiPassword && <PasswordField password={wifiPassword} />}
           </>
         ) : (
           <p className="text-[15px] text-foreground/80">Please ask the caretakers for the WiFi details.</p>
