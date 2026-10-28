@@ -3,6 +3,8 @@
 // Source: the professional shoot in "VILLA AURORA/00 Marketing Collaterals" (no people in any photo).
 // To add or replace a photo, make <name>-640.webp, <name>-1024.webp and <name>-1600.webp
 // in public/images and add the name below.
+// When REPLACING a photo, give it a new name: browsers keep photos for 30 days,
+// so reusing an old name can keep showing the old photo to returning visitors.
 
 export type PhotoName =
   | "aerial-view"
@@ -23,8 +25,8 @@ export type PhotoName =
   | "room-2"
   | "room-3"
   | "bathroom"
-  | "kitchen"
-  | "kitchen-stove"
+  | "kitchen-counter"
+  | "kitchen-cooktop"
   | "kitchen-sink"
   | "kitchenware"
   | "videoke"
