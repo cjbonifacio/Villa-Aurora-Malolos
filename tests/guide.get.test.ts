@@ -66,6 +66,15 @@ describe("GET /api/guide", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it("shares one sheet download between guests who arrive at the same moment", async () => {
+    process.env.GUIDE_SHEET_CSV_URL = "https://example.com/sheet.csv";
+    const fetchMock = vi.fn().mockImplementation(async () => new Response(SHEET));
+    vi.stubGlobal("fetch", fetchMock);
+    const results = await Promise.all(Array.from({ length: 20 }, () => call(SECRET)));
+    expect(results.every((r) => r.status === 200)).toBe(true);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it("falls back to the defaults when the sheet can't be loaded", async () => {
     process.env.GUIDE_SHEET_CSV_URL = "https://example.com/sheet.csv";
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));

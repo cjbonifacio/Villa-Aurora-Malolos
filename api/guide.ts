@@ -161,13 +161,23 @@ export const DEFAULT_ROWS: GuideRow[] = [
 
 // ---- Google Sheet (published as CSV), kept for 5 minutes ----
 let sheetCache: { at: number; rows: GuideRow[] } | null = null;
+let sheetInflight: Promise<GuideRow[] | null> | null = null;
 export function resetGuideCache() {
   sheetCache = null; // used by tests
+  sheetInflight = null;
 }
 
 // Returns the sheet's rows, or null if it can't be read (then the guide shows the defaults).
-async function sheetRows(csvUrl: string): Promise<GuideRow[] | null> {
-  if (sheetCache && Date.now() - sheetCache.at < 5 * 60_000) return sheetCache.rows;
+// Guests who open the guide at the same moment share one download instead of each asking Google.
+function sheetRows(csvUrl: string): Promise<GuideRow[] | null> {
+  if (sheetCache && Date.now() - sheetCache.at < 5 * 60_000) return Promise.resolve(sheetCache.rows);
+  sheetInflight ??= loadSheet(csvUrl).finally(() => {
+    sheetInflight = null;
+  });
+  return sheetInflight;
+}
+
+async function loadSheet(csvUrl: string): Promise<GuideRow[] | null> {
   try {
     const res = await fetch(csvUrl);
     if (!res.ok) throw new Error(`Sheet returned ${res.status}`);
