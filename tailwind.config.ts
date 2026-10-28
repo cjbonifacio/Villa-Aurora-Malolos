@@ -18,8 +18,8 @@ export default {
       //   display  -> headings, card titles, prices (Fraunces serif)
       //   sans     -> all body text, buttons, labels (Lexend)
       fontFamily: {
-        sans: ["Lexend", "system-ui", "sans-serif"],
-        display: ["Fraunces", "Georgia", "serif"],
+        sans: ["Lexend Variable", "system-ui", "sans-serif"],
+        display: ["Fraunces Variable", "Georgia", "serif"],
         cheetah: ["Cheetah Kick", "cursive"],
       },
       colors: {

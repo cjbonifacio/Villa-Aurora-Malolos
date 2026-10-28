@@ -13,7 +13,7 @@
 /* Villa Aurora Design System - Typography
    Cheetah Kick = titles (h1, h2), Fraunces = headings (h3, h4), Lexend = everything else. */
 body {
-  font-family: 'Lexend', system-ui, sans-serif;
+  font-family: 'Lexend Variable', system-ui, sans-serif;
   font-size: 17px;
   font-weight: 350;
   line-height: 1.7;
@@ -32,7 +32,7 @@ h1, h2 {
 }
 
 h3, h4 {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Fraunces Variable', Georgia, serif;
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -52,7 +52,7 @@ h3 {
 }
 
 button, .btn {
-  font-family: 'Lexend', system-ui, sans-serif;
+  font-family: 'Lexend Variable', system-ui, sans-serif;
   font-weight: 500;
   letter-spacing: 0.01em;
 }
