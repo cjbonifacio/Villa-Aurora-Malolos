@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, CalendarDays, MapPin, Users } from "lucide-react";
 import { photo } from "@/lib/photos";
-
-const hero = photo("villa-exterior");
 import { scrollToSection, startBooking } from "@/lib/booking";
+
+const hero = photo("exterior-evening");
 
 const STATS = [
   { value: "3", label: "AC Rooms" },
@@ -19,7 +19,7 @@ const Hero = () => {
         src={hero.src}
         srcSet={hero.srcSet}
         sizes={hero.sizes}
-        alt="Villa Aurora's Filipino-style house, veranda and courtyard"
+        alt="Villa Aurora's Filipino-style house and courtyard, lit up in the evening"
         className="absolute inset-0 h-full w-full object-cover"
       />
       {/* Darker on the left so the text is easy to read */}

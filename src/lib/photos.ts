@@ -1,18 +1,33 @@
 // Site photos, served as WebP in three sizes from /public/images so phones
 // download small files and big screens get sharp ones.
-// Originals live in src/assets/*.jpg. To add or replace a photo, make
-// <name>-640.webp, <name>-1024.webp and <name>-1600.webp in public/images.
+// Source: the professional shoot in "VILLA AURORA/00 Marketing Collaterals" (no people in any photo).
+// To add or replace a photo, make <name>-640.webp, <name>-1024.webp and <name>-1600.webp
+// in public/images and add the name below.
 
 export type PhotoName =
   | "aerial-view"
-  | "villa-exterior"
-  | "pool-area"
-  | "dining-area"
-  | "outdoor-space"
-  | "lounge-area"
-  | "room-simple"
-  | "room-family"
-  | "room-bunk";
+  | "exterior-evening"
+  | "exterior-day"
+  | "pavilion"
+  | "pool-waterfall"
+  | "pool"
+  | "pool-steps"
+  | "pool-dusk"
+  | "pool-night"
+  | "veranda"
+  | "veranda-lounge"
+  | "living-room"
+  | "living-dining"
+  | "dining-room"
+  | "room-1"
+  | "room-2"
+  | "room-3"
+  | "bathroom"
+  | "kitchen"
+  | "kitchen-stove"
+  | "videoke"
+  | "bbq-grill"
+  | "tables-chairs";
 
 export function photo(name: PhotoName, sizes = "100vw") {
   return {

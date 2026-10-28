@@ -33,7 +33,7 @@ const NotFound = () => {
             </Button>
           </div>
         </div>
-        <img {...photo("pool-area", "(min-width: 768px) 50vw, 100vw")} alt="The pool at Villa Aurora" className="rounded-xl shadow-elegant aspect-[4/3] object-cover w-full" />
+        <img {...photo("pool-waterfall", "(min-width: 768px) 50vw, 100vw")} alt="The pool waterfall at Villa Aurora" className="rounded-xl shadow-elegant aspect-[4/3] object-cover w-full" />
       </div>
     </SimplePageLayout>
   );

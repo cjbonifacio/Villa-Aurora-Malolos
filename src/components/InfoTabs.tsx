@@ -4,67 +4,90 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
-  Waves, Bed, Wifi, ChefHat, Users, Mic,
+  Waves, Bed, Sofa, ChefHat, Users, Mic, Flame,
   Image as ImageIcon, FileText, PawPrint, CalendarX, CigaretteOff, Wallet, Home, MessageCircle, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import { messengerLinkProps } from "@/lib/booking";
 import { photo, largePhoto, type PhotoName } from "@/lib/photos";
 
-const amenityCategories = [
+// Each amenity card shows a real photo of that area (no people in any photo).
+const amenityCategories: { title: string; icon: typeof Waves; photo: PhotoName; alt: string; items: string[] }[] = [
   {
-    title: "Pool Area",
+    title: "Swimming Pool",
     icon: Waves,
-    items: [
-      "Private adult pool (3–5 ft)",
-      "Kiddie pool (2 ft)",
-      "2 outdoor showers",
-      "Poolside comfort room",
-    ],
+    photo: "pool-waterfall",
+    alt: "Pool with a tiled waterfall wall",
+    items: ["Private adult pool (3–5 ft) with waterfall", "Kiddie pool (2 ft)", "2 outdoor showers", "Poolside comfort room"],
   },
   {
-    title: "Rooms",
+    title: "Air-conditioned Rooms",
     icon: Bed,
+    photo: "room-2",
+    alt: "Room 2 with a queen bed and double-deck beds",
     items: [
-      "Room 1: air-conditioned, 2 guests",
+      "Room 1: queen bed, 2 guests",
       "Room 2: 8 guests (queen bed, double deck, pull-out)",
       "Room 3: 12 guests (3 double decks)",
       "22 guests maximum overnight",
     ],
   },
   {
-    title: "Entertainment",
-    icon: Mic,
-    items: ["Unlimited videoke", "Billiards table", "Basic sound system", "Smart TV with YouTube"],
+    title: "Living & Dining Hall",
+    icon: Sofa,
+    photo: "living-dining",
+    alt: "Living room and long dining table under a wooden ceiling",
+    items: ["Air-conditioned lounge with sofa", "Long dining table for the whole group", "Smart TV with YouTube", "Filipino capiz windows and tiles"],
   },
   {
-    title: "Kitchen & Dining",
+    title: "Kitchen",
     icon: ChefHat,
-    items: [
-      "Refrigerator, water dispenser, rice cooker",
-      "Induction stove with pots and pans",
-      "Microwave",
-      "8-burner BBQ griller",
-    ],
+    photo: "kitchen",
+    alt: "Kitchen with sink, rice cooker and appliances",
+    items: ["Refrigerator and water dispenser", "Induction stove with pots and pans", "Rice cooker and microwave", "Plates, glasses and utensils"],
   },
   {
-    title: "General",
-    icon: Wifi,
-    items: ["Free unlimited fast WiFi", "Parking for 4 cars", "Tables & chairs for 22", "Event-ready setup"],
+    title: "Videoke & Entertainment",
+    icon: Mic,
+    photo: "videoke",
+    alt: "Videoke machine by the Villa Aurora green wall",
+    items: ["Unlimited videoke", "Billiards table", "Basic sound system", "Covered pavilion for parties"],
+  },
+  {
+    title: "Outdoor & BBQ",
+    icon: Flame,
+    photo: "bbq-grill",
+    alt: "Charcoal BBQ grill beside the garden",
+    items: ["8-burner BBQ griller", "Tables & chairs for 22", "Tiled courtyard and veranda", "Free WiFi and parking for 4 cars"],
   },
 ];
 
-const photos = [
-  { name: "aerial-view", alt: "Aerial view of the house, courtyard and pool" },
-  { name: "villa-exterior", alt: "Front of the villa with wooden veranda and stairs" },
-  { name: "pool-area", alt: "Pool with tiled waterfall wall" },
-  { name: "dining-area", alt: "Covered patio beside the pool" },
-  { name: "outdoor-space", alt: "Wooden veranda with the Villa Aurora sign" },
-  { name: "lounge-area", alt: "Brick entrance and stairs up to the balcony" },
-  { name: "room-simple", alt: "Room 1 with queen bed and capiz window" },
-  { name: "room-family", alt: "Room 2 with queen bed and double deck" },
-  { name: "room-bunk", alt: "Room 3 with three double-deck beds" },
-].map((p) => ({ ...p, ...photo(p.name as PhotoName, "(min-width: 768px) 33vw, 50vw"), large: largePhoto(p.name as PhotoName) }));
+// Photo gallery, in walking order: outside, pool, entertainment, inside.
+const photos = (
+  [
+    { name: "aerial-view", alt: "Aerial view of the house, courtyard and pool" },
+    { name: "exterior-evening", alt: "The house and wooden staircase lit up in the evening" },
+    { name: "pool-waterfall", alt: "Pool waterfall with blue mosaic tiles" },
+    { name: "pool", alt: "Adult pool and kiddie pool" },
+    { name: "pool-dusk", alt: "Pool and lounge chairs at dusk" },
+    { name: "pool-night", alt: "Pool lit up at night" },
+    { name: "pool-steps", alt: "Pool seen from the covered pavilion" },
+    { name: "exterior-day", alt: "Courtyard, staircase and covered pavilion" },
+    { name: "pavilion", alt: "Covered pavilion next to the pool" },
+    { name: "videoke", alt: "Videoke corner by the Villa Aurora green wall" },
+    { name: "veranda", alt: "Upstairs veranda with the Villa Aurora sign" },
+    { name: "veranda-lounge", alt: "Rattan lounge chairs on the veranda" },
+    { name: "living-dining", alt: "Living and dining hall" },
+    { name: "living-room", alt: "Living room with sofa and capiz windows" },
+    { name: "dining-room", alt: "Dining table for the whole group" },
+    { name: "room-1", alt: "Room 1 with a queen bed" },
+    { name: "room-2", alt: "Room 2 with a queen bed and double deck" },
+    { name: "room-3", alt: "Room 3 with three double-deck beds" },
+    { name: "bathroom", alt: "Bathroom with hot and cold shower" },
+    { name: "kitchen", alt: "Kitchen with appliances" },
+    { name: "bbq-grill", alt: "BBQ grill beside the garden" },
+  ] as { name: PhotoName; alt: string }[]
+).map((p) => ({ ...p, ...photo(p.name, "(min-width: 768px) 33vw, 50vw"), large: largePhoto(p.name) }));
 
 const policies = [
   {
@@ -209,8 +232,17 @@ const InfoTabs = () => {
 
           <TabsContent value="amenities">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {amenityCategories.map(({ title, icon: Icon, items }) => (
-                <Card key={title} className="border-0 shadow-elegant">
+              {amenityCategories.map(({ title, icon: Icon, items, photo: name, alt }) => (
+                <Card key={title} className="border-0 shadow-elegant overflow-hidden">
+                  <div className="aspect-[16/10] bg-muted">
+                    <img
+                      {...photo(name, "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw")}
+                      alt={alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="h-11 w-11 rounded-full bg-villa-gold/20 flex items-center justify-center shrink-0">
@@ -229,9 +261,6 @@ const InfoTabs = () => {
                   </CardContent>
                 </Card>
               ))}
-              <Card className="border-0 shadow-elegant overflow-hidden">
-                <img {...photo("pool-area", "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw")} alt="The pool at Villa Aurora" loading="lazy" className="h-full w-full object-cover min-h-48" />
-              </Card>
             </div>
           </TabsContent>
 

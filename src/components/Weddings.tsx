@@ -21,10 +21,10 @@ const features = [
 ];
 
 const photos = [
-  { ...photo("room-family", "(min-width: 768px) 25vw, 50vw"), alt: "Bright bedroom for getting ready" },
-  { ...photo("outdoor-space", "(min-width: 768px) 25vw, 50vw"), alt: "Wooden veranda for portraits" },
-  { ...photo("lounge-area", "(min-width: 768px) 25vw, 50vw"), alt: "Brick entrance and stairs" },
-  { ...photo("dining-area", "(min-width: 768px) 25vw, 50vw"), alt: "Covered patio beside the pool" },
+  { ...photo("room-2", "(min-width: 768px) 25vw, 50vw"), alt: "Bright bedroom for getting ready" },
+  { ...photo("veranda-lounge", "(min-width: 768px) 25vw, 50vw"), alt: "Veranda with the Villa Aurora sign, for portraits" },
+  { ...photo("living-room", "(min-width: 768px) 25vw, 50vw"), alt: "Air-conditioned living room for the entourage" },
+  { ...photo("exterior-evening", "(min-width: 768px) 25vw, 50vw"), alt: "The house and staircase lit up in the evening" },
 ];
 
 const Weddings = () => {
