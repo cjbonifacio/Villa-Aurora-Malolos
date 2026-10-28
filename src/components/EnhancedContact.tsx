@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useQueries } from "@tanstack/react-query";
 import { addDays, format, parseISO } from "date-fns";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -7,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock, Facebook, MessageCircle, CheckCircle2, Loader2, Copy, Navigation } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
-import { CONTACT, PACKAGE_LABELS, messengerLink, onStartBooking } from "@/lib/booking";
+import { CONTACT, PACKAGE_LABELS, isPhone, messengerLink, messengerLinkProps, onStartBooking } from "@/lib/booking";
 import { useConsent } from "@/lib/consent";
+import { fetchMonth, monthQueryKey, monthsOfStay, stayIsBooked } from "@/lib/availability";
 
 // Client-side check for quick feedback. The server (/api/request) validates again.
 const formSchema = z
@@ -23,7 +25,11 @@ const formSchema = z
     message: z.string().max(500, "Message is too long (max 500 characters)"),
     website: z.string(),
   })
-  .refine((f) => f.check_out > f.check_in, { message: "Check-out must be after check-in", path: ["check_out"] });
+  .refine((f) => f.check_out > f.check_in, { message: "Check-out must be after check-in", path: ["check_out"] })
+  .refine((f) => !f.check_in || f.check_out <= format(addDays(parseISO(f.check_in), 30), "yyyy-MM-dd"), {
+    message: "For stays longer than 30 nights, please message us on Messenger.",
+    path: ["check_out"],
+  });
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -73,6 +79,7 @@ const EnhancedContact = () => {
   const [error, setError] = useState<string | null>(null);
   const [sentMessage, setSentMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const consent = useConsent();
   const [mapRequested, setMapRequested] = useState(false);
@@ -80,6 +87,7 @@ const EnhancedContact = () => {
 
   const isDayTour = form.package_type === "daytour";
   const today = format(new Date(), "yyyy-MM-dd");
+  const maxDate = format(addDays(new Date(), 729), "yyyy-MM-dd"); // the server accepts up to 2 years ahead
 
   // "Book" buttons elsewhere on the page pre-fill the package and/or date.
   useEffect(
@@ -112,55 +120,86 @@ const EnhancedContact = () => {
     }
   };
 
+  // A day tour uses one day, so check-out is simply the next day.
+  const checkOut = isDayTour && form.check_in ? format(addDays(parseISO(form.check_in), 1), "yyyy-MM-dd") : form.check_out;
+
+  // As soon as dates are picked, load those months' booked dates (shared with the calendar).
+  // Then the submit button can open Messenger instantly, which phones need to jump straight into the app.
+  const stayMonths = monthsOfStay(form.check_in, checkOut);
+  const monthResults = useQueries({
+    queries: stayMonths.map((m) => ({ queryKey: monthQueryKey(m), queryFn: () => fetchMonth(m), staleTime: 5 * 60 * 1000 })),
+  });
+  const datesKnown = stayMonths.length > 0 && monthResults.every((q) => q.isSuccess);
+  const datesTaken = datesKnown && stayIsBooked(monthResults.flatMap((q) => q.data ?? []), form.check_in, checkOut);
+
+  // Opens the chat. Phones: same tab, so the Messenger app opens straight to our chat.
+  // Computers: a new tab (falls back to this tab if pop-ups are blocked).
+  const openMessenger = (link: string) => {
+    if (isPhone() || !window.open(link, "_blank", "noopener")) window.location.href = link;
+  };
+
+  const saveRequest = (data: FormData) =>
+    fetch("/api/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      keepalive: true, // finishes saving even while the guest switches to Messenger
+    });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setNotice(null);
 
-    // A day tour uses one day, so check-out is simply the next day.
-    const payload = {
-      ...form,
-      check_out: isDayTour && form.check_in ? format(addDays(parseISO(form.check_in), 1), "yyyy-MM-dd") : form.check_out,
-    };
-    const parsed = formSchema.safeParse(payload);
+    const parsed = formSchema.safeParse({ ...form, check_out: checkOut });
     if (!parsed.success) {
       setError(parsed.error.errors[0].message);
+      return;
+    }
+    if (datesTaken) {
+      setError("Sorry, some of those dates are already booked. Please pick other dates.");
       return;
     }
 
     const text = buildMessage(parsed.data);
     const link = messengerLink(text);
+    copyMessage(text); // backup, in case Messenger doesn't pre-fill the message
 
-    // Open the Messenger tab right away (browsers block pop-ups opened later),
-    // and copy the message in case Messenger doesn't pre-fill it.
-    const messengerTab = window.open("", "_blank");
-    copyMessage(text);
+    if (datesKnown) {
+      // Normal case: dates look free, so go to Messenger right away (still part of the tap)
+      // and save the request in the background.
+      setSentMessage(text);
+      setStatus("sent");
+      setForm(emptyForm);
+      openMessenger(link);
+      saveRequest(parsed.data)
+        .then(async (res) => {
+          if (res.status === 409) setNotice("Heads up: those dates were just booked by someone else. Tell us in Messenger and we'll suggest other dates.");
+          else if (!res.ok && res.status !== 429) console.warn("Request not saved", res.status, await res.text());
+        })
+        .catch(() => {});
+      return;
+    }
 
+    // Booked dates couldn't be loaded: wait for the server's check first.
     setStatus("sending");
     try {
-      const res = await fetch("/api/request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
-      });
+      const res = await saveRequest(parsed.data);
       const data = await res.json().catch(() => ({}));
-      // Dates taken or form invalid: stop here so the guest can fix it.
-      if (res.status === 409 || res.status === 400 || res.status === 429) {
-        messengerTab?.close();
+      if (res.status === 409 || res.status === 400) {
         setStatus("idle");
         setError(data.error || "Please check your details.");
         return;
       }
-      // Any other server problem: still send them to Messenger so the request isn't lost.
+      // Busy (429) or a server problem: Messenger still gets the request, so carry on.
     } catch {
-      // Network problem: same, Messenger still gets the request.
+      // Network problem: same.
     }
-
-    if (messengerTab) messengerTab.location.href = link;
-    else window.location.href = link;
-
     setSentMessage(text);
     setStatus("sent");
     setForm(emptyForm);
+    // On a computer the chat can open by itself; on a phone the guest taps "Open Messenger chat".
+    if (!isPhone()) openMessenger(link);
   };
 
   return (
@@ -188,14 +227,20 @@ const EnhancedContact = () => {
                   <CheckCircle2 className="h-12 w-12 text-villa-forest-green mx-auto" />
                   <h3 className="text-2xl font-semibold">Almost done! Tap Send in Messenger</h3>
                   <p className="text-foreground/70 max-w-md mx-auto">
-                    We opened Messenger with your booking details. Just press <strong>Send</strong> so it reaches us.
+                    Your booking details are ready in our Messenger chat. Just press <strong>Send</strong> so it
+                    reaches us.
                     {copied && " The message is also copied, so you can paste it if the chat box is empty."}
                   </p>
+                  {notice && (
+                    <p role="alert" className="text-sm font-medium text-destructive bg-destructive/10 rounded-md p-3 max-w-md mx-auto">
+                      {notice}
+                    </p>
+                  )}
                   <div className="flex flex-col sm:flex-row justify-center gap-3">
                     <Button variant="messenger" size="lg" asChild>
-                      <a href={messengerLink(sentMessage)} target="_blank" rel="noopener noreferrer">
+                      <a {...messengerLinkProps(sentMessage)}>
                         <MessageCircle />
-                        Open Messenger again
+                        Open Messenger chat
                       </a>
                     </Button>
                     <Button variant="outline" size="lg" onClick={() => copyMessage(sentMessage)}>
@@ -258,14 +303,19 @@ const EnhancedContact = () => {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <Field id="check_in" label={isDayTour ? "Date *" : "Check-in *"}>
-                      <Input id="check_in" type="date" min={today} value={form.check_in} onChange={update("check_in")} required />
+                      <Input id="check_in" type="date" min={today} max={maxDate} value={form.check_in} onChange={update("check_in")} required />
                     </Field>
                     {!isDayTour && (
                       <Field id="check_out" label="Check-out *">
-                        <Input id="check_out" type="date" min={form.check_in || today} value={form.check_out} onChange={update("check_out")} required />
+                        <Input id="check_out" type="date" min={form.check_in || today} max={maxDate} value={form.check_out} onChange={update("check_out")} required />
                       </Field>
                     )}
                   </div>
+                  {datesTaken && (
+                    <p role="alert" className="-mt-2 text-sm font-medium text-destructive">
+                      Those dates are already booked. Please pick other dates, or check the calendar above.
+                    </p>
+                  )}
 
                   <Field id="email" label="Email (optional)">
                     <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={update("email")} />
@@ -316,7 +366,7 @@ const EnhancedContact = () => {
                 <CardTitle className="text-xl">Talk to us</CardTitle>
               </CardHeader>
               <CardContent className="space-y-1">
-                <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-md p-2 -mx-2 min-h-11 hover:bg-muted transition-colors">
+                <a {...messengerLinkProps()} className="flex items-center gap-3 rounded-md p-2 -mx-2 min-h-11 hover:bg-muted transition-colors">
                   <MessageCircle className="h-5 w-5 text-[#0866FF] shrink-0" />
                   <span>Message us on Messenger</span>
                 </a>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import LegalPage from "@/components/LegalPage";
-import { CONTACT } from "@/lib/booking";
+import { CONTACT, messengerLinkProps } from "@/lib/booking";
 import { usePageMeta } from "@/lib/usePageMeta";
 import { openCookieSettings } from "@/lib/consent";
 
@@ -131,7 +131,7 @@ const Privacy = () => {
             <p>
               For any privacy question or request, email <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>, call{" "}
               <a href={`tel:${CONTACT.phone}`}>{CONTACT.phoneLabel}</a>, or message us on{" "}
-              <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+              <a {...messengerLinkProps()}>
                 Messenger
               </a>
               . See also our <Link to="/terms">Terms &amp; Conditions</Link>.

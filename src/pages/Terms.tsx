@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import LegalPage from "@/components/LegalPage";
-import { CONTACT } from "@/lib/booking";
+import { CONTACT, messengerLinkProps } from "@/lib/booking";
 import { usePageMeta } from "@/lib/usePageMeta";
 
 // Plain-language terms. They repeat the house policies shown on the home page.
@@ -104,7 +104,7 @@ const Terms = () => {
             <p>
               These terms are governed by the laws of the Philippines. Questions? Email{" "}
               <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a> or message us on{" "}
-              <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+              <a {...messengerLinkProps()}>
                 Messenger
               </a>
               .

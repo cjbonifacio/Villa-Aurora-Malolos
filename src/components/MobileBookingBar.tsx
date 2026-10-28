@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CalendarDays, MessageCircle } from "lucide-react";
-import { CONTACT, scrollToSection } from "@/lib/booking";
+import { messengerLinkProps, scrollToSection } from "@/lib/booking";
 
 // Sticky bar at the bottom of the screen on phones, so booking is always one tap away.
 const MobileBookingBar = () => (
@@ -11,7 +11,7 @@ const MobileBookingBar = () => (
         Check dates
       </Button>
       <Button variant="messenger" size="lg" className="px-3" asChild>
-        <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+        <a {...messengerLinkProps()}>
           <MessageCircle />
           Messenger
         </a>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, MessageCircle } from "lucide-react";
 import SimplePageLayout from "@/components/SimplePageLayout";
-import { CONTACT } from "@/lib/booking";
+import { messengerLinkProps } from "@/lib/booking";
 import { usePageMeta } from "@/lib/usePageMeta";
 import { photo } from "@/lib/photos";
 
@@ -26,7 +26,7 @@ const NotFound = () => {
               </Link>
             </Button>
             <Button variant="outline" size="xl" className="px-8" asChild>
-              <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+              <a {...messengerLinkProps()}>
                 <MessageCircle />
                 Message Us
               </a>

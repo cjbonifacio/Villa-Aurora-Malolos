@@ -8,7 +8,7 @@ import {
   Image as ImageIcon, FileText, PawPrint, CalendarX, CigaretteOff, Wallet, Home, MessageCircle, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
-import { CONTACT } from "@/lib/booking";
+import { messengerLinkProps } from "@/lib/booking";
 import { photo, largePhoto, type PhotoName } from "@/lib/photos";
 
 const amenityCategories = [
@@ -261,7 +261,7 @@ const InfoTabs = () => {
               <h3 className="text-xl font-semibold mb-1">Questions about our policies?</h3>
               <p className="text-foreground/70 mb-4">Message us anytime, we're happy to help.</p>
               <Button variant="messenger" size="lg" asChild>
-                <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+                <a {...messengerLinkProps()}>
                   <MessageCircle />
                   Ask on Messenger
                 </a>

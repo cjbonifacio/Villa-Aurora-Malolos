@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Facebook, MessageCircle, Phone } from "lucide-react";
-import { CONTACT } from "@/lib/booking";
+import { CONTACT, messengerLinkProps } from "@/lib/booking";
 import { openCookieSettings } from "@/lib/consent";
 
 const Footer = ({ withMobileBar = false }: { withMobileBar?: boolean }) => (
@@ -13,7 +13,7 @@ const Footer = ({ withMobileBar = false }: { withMobileBar?: boolean }) => (
         <a href={CONTACT.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook page" className="h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
           <Facebook className="h-5 w-5" />
         </a>
-        <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer" aria-label="Messenger" className="h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+        <a {...messengerLinkProps()} aria-label="Messenger" className="h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
           <MessageCircle className="h-5 w-5" />
         </a>
         <a href={`tel:${CONTACT.phone}`} aria-label={`Call ${CONTACT.phoneLabel}`} className="h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">

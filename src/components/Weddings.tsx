@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Users, Camera, MapPin, MessageCircle, Check } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
-import { messengerLink, startBooking } from "@/lib/booking";
+import { messengerLinkProps, startBooking } from "@/lib/booking";
 import { photo } from "@/lib/photos";
 
 const features = [
@@ -82,11 +82,7 @@ const Weddings = () => {
               Request a Wedding Booking
             </Button>
             <Button variant="luxury" size="xl" className="px-8" asChild>
-              <a
-                href={messengerLink("Hi Villa Aurora! I'd like to ask about wedding preparation at the villa.")}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a {...messengerLinkProps("Hi Villa Aurora! I'd like to ask about wedding preparation at the villa.")}>
                 <MessageCircle />
                 Ask on Messenger
               </a>

@@ -5,6 +5,14 @@
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
+// "2026-12-01" + 1 month -> "2027-01-01"
+function addMonthsYmd(ymd: string, months: number) {
+  const d = new Date(`${ymd.slice(0, 7)}-01T00:00:00Z`);
+  d.setUTCMonth(d.getUTCMonth() + months);
+  return d.toISOString().slice(0, 10);
+}
+const nextMonth = (ymd: string) => addMonthsYmd(ymd, 1);
+
 // Old Supabase keys are JWTs ("eyJ...") and go in both headers. New "sb_secret_..." keys go in apikey only.
 function supabaseHeaders(key: string): Record<string, string> {
   return key.startsWith("eyJ") ? { apikey: key, Authorization: `Bearer ${key}` } : { apikey: key };
@@ -52,12 +60,26 @@ function parseIcalDate(line: string) {
   return { date: manila, allDay: false, time: utc };
 }
 
+// Keeps the downloaded feed for 60 seconds, and lets requests that arrive at the same moment share
+// one download, so a burst of visitors doesn't hammer Google (which could block the feed).
+let feedCache: { at: number; text: Promise<string> } | null = null;
+function loadFeed(icsUrl: string): Promise<string> {
+  if (feedCache && Date.now() - feedCache.at < 60_000) return feedCache.text;
+  const text = fetch(icsUrl, { headers: { Accept: "text/calendar" } }).then(async (res) => {
+    if (!res.ok) throw new Error(`Google Calendar feed returned ${res.status}`);
+    return (await res.text()).replace(/\r?\n[ \t]/g, ""); // unfold long lines
+  });
+  feedCache = { at: Date.now(), text };
+  text.catch(() => {
+    feedCache = null; // don't keep a failed download
+  });
+  return text;
+}
+
 async function calendarRanges(from: string, to: string): Promise<DateRange[]> {
   const icsUrl = process.env.GOOGLE_CALENDAR_ICS_URL?.trim();
   if (!icsUrl) return []; // not set up: the site just uses Supabase blocked_dates
-  const res = await fetch(icsUrl, { headers: { Accept: "text/calendar" } });
-  if (!res.ok) throw new Error(`Google Calendar feed returned ${res.status}`);
-  const text = (await res.text()).replace(/\r?\n[ \t]/g, ""); // unfold long lines
+  const text = await loadFeed(icsUrl);
 
   const ranges: DateRange[] = [];
   for (const block of text.split("BEGIN:VEVENT").slice(1)) {
@@ -97,11 +119,21 @@ export async function GET(request: Request) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) return json({ error: "Server is not configured yet." }, 500);
 
+  // Only accept exactly what the website asks for: one whole month, e.g. ?from=2026-12-01&to=2027-01-01,
+  // within the next 2 years. Anything else (extra values, huge ranges) is refused before touching the
+  // database, so nobody can skip the 5-minute cache and flood Supabase or Google Calendar.
   const params = new URL(request.url).searchParams;
   const from = params.get("from") ?? "";
   const to = params.get("to") ?? "";
-  if (!DATE.test(from) || !DATE.test(to) || from >= to) {
-    return json({ error: "Use ?from=YYYY-MM-DD&to=YYYY-MM-DD" }, 400);
+  const thisMonth = new Date().toISOString().slice(0, 7) + "-01";
+  const validMonth =
+    [...params.keys()].every((k) => k === "from" || k === "to") &&
+    /^\d{4}-\d{2}-01$/.test(from) &&
+    to === nextMonth(from) &&
+    from >= addMonthsYmd(thisMonth, -1) &&
+    from <= addMonthsYmd(thisMonth, 24);
+  if (!DATE.test(from) || !validMonth) {
+    return json({ error: "Use ?from=YYYY-MM-01&to=<first day of the next month>, within the next 2 years" }, 400);
   }
 
   // Ranges that overlap [from, to). check_out is exclusive (that day is free for the next guest).

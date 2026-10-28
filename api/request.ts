@@ -21,16 +21,39 @@ const RequestSchema = z
   })
   .refine((r) => r.check_out > r.check_in, { message: "Check-out must be after check-in", path: ["check_out"] });
 
-// Simple rate limit: 5 requests per 10 minutes per IP. In-memory, so it is per
-// server instance (best effort) — enough to stop casual spam.
+// ---- Flood protection ----
+// 1. Quick per-visitor limit (5 per 10 minutes per IP). It lives in memory, so it only covers one
+//    server copy; Vercel runs several copies during a burst, which is why 2 and 3 also exist.
+// 2. Site-wide limit, counted in the database: at most MAX_PER_HOUR new requests per hour.
+// 3. Per-guest limit, counted in the database: at most MAX_PER_PHONE_PER_DAY requests per phone number per day.
+//    2 and 3 are checked here first (cheap), and enforced for certain by a database rule
+//    (supabase/migrations/0002_lock_down.sql), which also covers requests arriving at the same moment.
+// When a limit is hit, the guest is asked to message us on Messenger instead, so real guests are never lost.
+const MAX_PER_HOUR = 20;
+const MAX_PER_PHONE_PER_DAY = 3;
+const MAX_BODY_BYTES = 10_000; // a real form is under 2 KB
+const MAX_NIGHTS = 30;
+
 const hits = new Map<string, number[]>();
 function rateLimited(ip: string) {
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60 * 1000);
   recent.push(now);
   hits.set(ip, recent);
+  if (hits.size > 5000) hits.clear(); // keep memory small during a flood from many IPs
   return recent.length > 5;
 }
+
+// How many booking_requests match `filter` (Supabase returns the total in the Content-Range header).
+async function countRequests(url: string, headers: Record<string, string>, filter: string) {
+  const res = await fetch(`${url}/rest/v1/booking_requests?select=id&${filter}`, {
+    headers: { ...headers, Prefer: "count=exact", Range: "0-0" },
+  });
+  if (!res.ok) throw new Error(`count failed: ${await supabaseError(res)}`);
+  return Number(res.headers.get("content-range")?.split("/")[1] ?? 0);
+}
+
+const BUSY_MESSAGE = "We're getting a lot of requests right now. Please message us on Messenger and we'll reply soon.";
 
 // Old Supabase keys are JWTs ("eyJ...") and go in both headers. New "sb_secret_..." keys go in apikey only.
 function supabaseHeaders(key: string): Record<string, string> {
@@ -79,12 +102,26 @@ function parseIcalDate(line: string) {
   return { date: manila, allDay: false, time: utc };
 }
 
+// Keeps the downloaded feed for 60 seconds, and lets requests that arrive at the same moment share
+// one download, so a burst of visitors doesn't hammer Google (which could block the feed).
+let feedCache: { at: number; text: Promise<string> } | null = null;
+function loadFeed(icsUrl: string): Promise<string> {
+  if (feedCache && Date.now() - feedCache.at < 60_000) return feedCache.text;
+  const text = fetch(icsUrl, { headers: { Accept: "text/calendar" } }).then(async (res) => {
+    if (!res.ok) throw new Error(`Google Calendar feed returned ${res.status}`);
+    return (await res.text()).replace(/\r?\n[ \t]/g, ""); // unfold long lines
+  });
+  feedCache = { at: Date.now(), text };
+  text.catch(() => {
+    feedCache = null; // don't keep a failed download
+  });
+  return text;
+}
+
 async function calendarRanges(from: string, to: string): Promise<DateRange[]> {
   const icsUrl = process.env.GOOGLE_CALENDAR_ICS_URL?.trim();
   if (!icsUrl) return []; // not set up: the site just uses Supabase blocked_dates
-  const res = await fetch(icsUrl, { headers: { Accept: "text/calendar" } });
-  if (!res.ok) throw new Error(`Google Calendar feed returned ${res.status}`);
-  const text = (await res.text()).replace(/\r?\n[ \t]/g, ""); // unfold long lines
+  const text = await loadFeed(icsUrl);
 
   const ranges: DateRange[] = [];
   for (const block of text.split("BEGIN:VEVENT").slice(1)) {
@@ -126,11 +163,17 @@ export async function POST(request: Request) {
   if (!url || !key) return json({ error: "Server is not configured yet." }, 500);
 
   const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
-  if (rateLimited(ip)) return json({ error: "Too many requests. Please try again later or message us on Facebook." }, 429);
+  if (rateLimited(ip)) return json({ error: "Too many requests. Please try again later or message us on Messenger." }, 429);
 
+  // Refuse oversized bodies before reading them.
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
+    return json({ error: "Request is too large." }, 413);
+  }
   let body: unknown;
   try {
-    body = await request.json();
+    const text = await request.text();
+    if (text.length > MAX_BODY_BYTES) return json({ error: "Request is too large." }, 413);
+    body = JSON.parse(text);
   } catch {
     return json({ error: "Invalid request." }, 400);
   }
@@ -144,7 +187,12 @@ export async function POST(request: Request) {
   // Honeypot filled in = a bot. Pretend it worked so it doesn't retry.
   if (r.website) return json({ ok: true });
 
-  if (r.check_in < todayInManila()) return json({ error: "Check-in date is in the past." }, 400);
+  const today = todayInManila();
+  if (r.check_in < today) return json({ error: "Check-in date is in the past." }, 400);
+  if (r.check_in > addDays(today, 730)) return json({ error: "Please pick a date within the next 2 years." }, 400);
+  if (r.check_out > addDays(r.check_in, MAX_NIGHTS)) {
+    return json({ error: `For stays longer than ${MAX_NIGHTS} nights, please message us on Messenger.` }, 400);
+  }
 
   const headers = { ...supabaseHeaders(key), "Content-Type": "application/json" };
 
@@ -168,6 +216,20 @@ export async function POST(request: Request) {
     return json({ error: "Sorry, some of those dates are already booked. Please pick other dates." }, 409);
   }
 
+  // Database-backed limits (see "Flood protection" above).
+  try {
+    const hourAgo = new Date(Date.now() - 3600_000).toISOString();
+    const dayAgo = new Date(Date.now() - 86_400_000).toISOString();
+    const [lastHour, samePhone] = await Promise.all([
+      countRequests(url, headers, `created_at=gte.${hourAgo}`),
+      countRequests(url, headers, `created_at=gte.${dayAgo}&phone=eq.${encodeURIComponent(r.phone)}`),
+    ]);
+    if (lastHour >= MAX_PER_HOUR || samePhone >= MAX_PER_PHONE_PER_DAY) return json({ error: BUSY_MESSAGE }, 429);
+  } catch (err) {
+    console.error("Flood check error", (err as Error).message);
+    return json({ error: "Could not check availability. Please try again." }, 502);
+  }
+
   const insert = await fetch(`${url}/rest/v1/booking_requests`, {
     method: "POST",
     headers: { ...headers, Prefer: "return=minimal" },
@@ -184,8 +246,11 @@ export async function POST(request: Request) {
     }),
   });
   if (!insert.ok) {
-    console.error("Supabase insert error", insert.status, await supabaseError(insert));
-    return json({ error: "Could not send your request. Please try again or message us on Facebook." }, 502);
+    const detail = await supabaseError(insert);
+    // The database's own flood limit (supabase/migrations/0002_lock_down.sql) refused it.
+    if (detail.includes("rate_limited")) return json({ error: BUSY_MESSAGE }, 429);
+    console.error("Supabase insert error", insert.status, detail);
+    return json({ error: "Could not send your request. Please try again or message us on Messenger." }, 502);
   }
 
   return json({ ok: true });

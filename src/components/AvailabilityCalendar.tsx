@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Loader2, Info } from "lucide-react";
-import { CONTACT, startBooking } from "@/lib/booking";
+import { messengerLinkProps, startBooking } from "@/lib/booking";
 import {
   addMonths,
   subMonths,
@@ -16,20 +16,7 @@ import {
   isBefore,
 } from "date-fns";
 
-interface BookedRange {
-  check_in: string; // YYYY-MM-DD
-  check_out: string; // YYYY-MM-DD, exclusive
-}
-
-// Loads booked ranges for one month from our /api/availability function.
-async function fetchMonth(month: Date): Promise<BookedRange[]> {
-  const from = format(startOfMonth(month), "yyyy-MM-dd");
-  const to = format(addMonths(startOfMonth(month), 1), "yyyy-MM-dd");
-  const res = await fetch(`/api/availability?from=${from}&to=${to}`);
-  if (!res.ok) throw new Error(`Availability request failed (${res.status})`);
-  const data = await res.json();
-  return data.ranges ?? [];
-}
+import { MONTHS_AHEAD, fetchMonth, monthQueryKey } from "@/lib/availability";
 
 const AvailabilityCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -37,8 +24,8 @@ const AvailabilityCalendar = () => {
 
   const monthKey = format(currentMonth, "yyyy-MM");
   const { data: ranges = [], isLoading, isError, refetch } = useQuery({
-    queryKey: ["availability", monthKey],
-    queryFn: () => fetchMonth(currentMonth),
+    queryKey: monthQueryKey(monthKey),
+    queryFn: () => fetchMonth(monthKey),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -69,6 +56,8 @@ const AvailabilityCalendar = () => {
 
   // Don't let visitors page back before the current month.
   const canGoBack = startOfMonth(currentMonth) > startOfMonth(today);
+  // ...or more than ~2 years ahead (the server only answers that far).
+  const canGoForward = startOfMonth(currentMonth) < startOfMonth(addMonths(today, MONTHS_AHEAD));
 
   return (
     <div>
@@ -92,6 +81,7 @@ const AvailabilityCalendar = () => {
               size="icon"
               onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
               className="h-10 w-10"
+              disabled={!canGoForward}
               aria-label="Next month"
             >
               <ChevronRight className="h-5 w-5" />
@@ -115,7 +105,7 @@ const AvailabilityCalendar = () => {
               <div className="flex justify-center gap-3">
                 <Button onClick={() => refetch()}>Retry</Button>
                 <Button variant="outline" asChild>
-                  <a href={CONTACT.messengerUrl} target="_blank" rel="noopener noreferrer">
+                  <a {...messengerLinkProps()}>
                     Message us
                   </a>
                 </Button>

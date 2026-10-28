@@ -23,9 +23,10 @@ Owner: CJ. Business: Villa Aurora Private Resort, Malolos, Bulacan (private reso
    (Vercel Serverless Functions - they work alongside Vite). Customers can see availability, submit a booking
    REQUEST, or tap through to Facebook (https://www.facebook.com/villaaurora.malolos). The site NEVER confirms a
    booking; CJ approves in the admin.
-   Known gaps to fix in web/: AvailabilityCalendar.tsx uses MOCK dates; EnhancedContact.tsx handleSubmit only
-   console.logs; Availability.tsx / AvailabilityCalendar.tsx point to a PUBLIC Google Calendar iCal (leaks guest names
-   via "RESERVED: <name>" - remove it); phone numbers and Facebook links are inconsistent across components.
+   Current state: see docs/PROJECT_STATUS.md. Phase 1 and most of Phase 4 are done. Availability comes from
+   Google Calendar (secret iCal address, env GOOGLE_CALENDAR_ICS_URL, read server-side in api/*.ts, dates only)
+   plus Supabase blocked_dates. The booking form saves to booking_requests and opens Messenger pre-filled.
+   Contact details live in src/lib/booking.ts; photos in public/images (WebP, 3 sizes) via src/lib/photos.ts.
 3. `supabase/migrations/` — schema for the public site (blocked_dates, booking_requests, RLS on).
 
 ## Data flow (build in this order)
@@ -33,7 +34,7 @@ Phase 1  Replace mock dates in AvailabilityCalendar with real `blocked_dates` (v
          cached 5 min). A day is booked if check_in <= day < check_out (check-out day stays open). Wire the contact
          form to `api/request.ts` (zod validation, server-side date re-check, honeypot, rate limit) -> insert
          into `booking_requests`. Remove the public iCal links. Facebook/Messenger button stays.
-Phase 2  Admin -> Supabase sync: after saveBooking succeeds, Apps Script POSTs the new range to `blocked_dates`
+Phase 2  (Optional now: the site already reads Google Calendar directly.) Admin -> Supabase sync: after saveBooking succeeds, Apps Script POSTs the new range to `blocked_dates`
          via UrlFetch (service-role key in Script Properties: SUPABASE_URL, SUPABASE_SERVICE_KEY). Also a one-time
          backfill function from the sheet/calendar. Sync failure must NOT fail the booking (log to Error Log).
 Phase 3  Admin pulls `pending` requests from Supabase into a "Requests" view; CJ taps Approve -> prefilled

@@ -49,3 +49,18 @@ export function scrollToSection(id: string) {
 export function messengerLink(text?: string) {
   return text ? `${CONTACT.messengerUrl}?text=${encodeURIComponent(text)}` : CONTACT.messengerUrl;
 }
+
+// True on phones and tablets (where the Messenger app is).
+export function isPhone() {
+  if (typeof navigator === "undefined") return false;
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+}
+
+// Use on every "Message us" link: <a {...messengerLinkProps()}>.
+// On phones the link opens in the same tab, which makes the Messenger app open straight to our chat.
+// (A new tab often shows a Facebook web page with an extra "Open in Messenger" step instead.)
+// On computers it opens a new tab so the website stays open.
+export function messengerLinkProps(text?: string) {
+  const href = messengerLink(text);
+  return isPhone() ? { href } : { href, target: "_blank", rel: "noopener noreferrer" };
+}
