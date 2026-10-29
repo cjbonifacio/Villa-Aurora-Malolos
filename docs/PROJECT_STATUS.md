@@ -1,6 +1,6 @@
 # Villa Aurora website — project status
 
-Last updated: October 27, 2026. Live at **https://villa-aurora-malolos.vercel.app** (Vercel deploys every push to `main`).
+Last updated: October 27, 2026. Live at **https://villaauroramalolos.com** (Vercel deploys every push to `main`).
 
 ## How it fits together
 
@@ -75,7 +75,7 @@ Change a setting → Deployments → ⋯ → Redeploy.
 1. Google Sheets: new sheet, rename the tab `Guide`, import `docs/guide-sheet-template.csv` (File → Import), then type the WiFi password.
 2. File → Share → Publish to web → choose the `Guide` tab and **CSV** → Publish → copy the link into `GUIDE_SHEET_CSV_URL` on Vercel.
 3. Make a secret (`node -e "console.log(require('crypto').randomBytes(18).toString('base64url'))"`), put it in `GUIDE_SECRET`, redeploy.
-4. Send guests `https://villa-aurora-malolos.vercel.app/guide/<secret>` on Messenger after you confirm the booking.
+4. Send guests `https://villaauroramalolos.com/guide/<secret>` on Messenger after you confirm the booking.
 
 Columns: `section, key, value, value_tl (Tagalog), link`. A row with the same section and key as a built-in line replaces it;
 a new key adds a line; an empty `value` hides a built-in line. Sections: `wifi`, `checkin`, `checkout`, `rules`, `fees`,

@@ -18,7 +18,7 @@ Owner: CJ. Business: Villa Aurora Private Resort, Malolos, Bulacan (private reso
      -> write -> rollback on error). Dates are parsed as local (Asia/Manila) midnight.
    - Booking dates: check-out is EXCLUSIVE. Dec 24-25 and Dec 26-27 leave 25-26 open. Back-to-back is allowed.
 2. `web/` — EXISTING public customer site (Vite + React 18 + TypeScript + Tailwind + shadcn/ui + TanStack Query
-   + date-fns + zod + react-router), deployed on Vercel at villa-aurora-malolos.vercel.app. Keep this stack; do NOT
+   + date-fns + zod + react-router), deployed on Vercel at villaauroramalolos.com (old villa-aurora-malolos.vercel.app redirects there). Keep this stack; do NOT
    convert it to Next.js. Keep the existing design, copy, photos and rates. Server code goes in `api/*.ts`
    (Vercel Serverless Functions - they work alongside Vite). Customers can see availability, submit a booking
    REQUEST, or tap through to Facebook (https://www.facebook.com/villaaurora.malolos). The site NEVER confirms a

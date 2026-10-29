@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const SITE_URL = "https://villa-aurora-malolos.vercel.app";
+export const SITE_URL = "https://villaauroramalolos.com";
 
 // Sets the browser tab title, description and canonical link for the current page.
 export function usePageMeta(title: string, description: string, path = "/") {

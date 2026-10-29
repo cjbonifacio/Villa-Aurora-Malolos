@@ -1,7 +1,7 @@
 # Villa Aurora Malolos — website
 
 Public website for Villa Aurora Private Resort, Malolos, Bulacan.
-Live at **https://villa-aurora-malolos.vercel.app** (deployed by Vercel from the `main` branch).
+Live at **https://villaauroramalolos.com** (deployed by Vercel from the `main` branch).
 
 Guests can see live availability, view rates and photos, and send a booking request that opens
 Facebook Messenger. The site never confirms a booking; CJ confirms bookings in the admin app.

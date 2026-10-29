@@ -52,11 +52,13 @@ The code is already in. Turn it on once in Vercel:
 - Project → **Speed Insights** → **Enable** (real page speed from visitors' phones).
 
 ## 6. Google and Facebook
-- Google Search Console (https://search.google.com/search-console) → add
-  `https://villa-aurora-malolos.vercel.app` → submit `sitemap.xml`.
+- Google Search Console (https://search.google.com/search-console) → add a **Domain** property for
+  `villaauroramalolos.com` (verify with the TXT record Google gives you, added in Vercel → Domains →
+  DNS Records) → submit `sitemap.xml`.
 - Check the link preview: https://developers.facebook.com/tools/debug → paste the site URL → **Scrape Again**.
-- If you buy a custom domain later, replace `villa-aurora-malolos.vercel.app` in `index.html`,
-  `public/sitemap.xml`, `public/robots.txt` and `src/lib/usePageMeta.ts`.
+- The site address is `https://villaauroramalolos.com`. The old `villa-aurora-malolos.vercel.app` and
+  `www.villaauroramalolos.com` redirect there (see `vercel.json`). If the address ever changes again,
+  update it in `index.html`, `public/sitemap.xml`, `public/robots.txt`, `src/lib/usePageMeta.ts` and `vercel.json`.
 
 ## 7. Legal pages
 `/privacy` and `/terms` are plain-language drafts based on your current house rules and the

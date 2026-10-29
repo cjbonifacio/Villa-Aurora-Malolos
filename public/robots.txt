@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /guide/
 
-Sitemap: https://villa-aurora-malolos.vercel.app/sitemap.xml
+Sitemap: https://villaauroramalolos.com/sitemap.xml

@@ -1,4 +1,18 @@
 {
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "villa-aurora-malolos.vercel.app" }],
+      "destination": "https://villaauroramalolos.com/:path",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.villaauroramalolos.com" }],
+      "destination": "https://villaauroramalolos.com/:path",
+      "permanent": true
+    }
+  ],
   "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
   "headers": [
     {
